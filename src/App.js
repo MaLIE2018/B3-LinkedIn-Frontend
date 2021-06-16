@@ -110,6 +110,9 @@ class App extends React.Component {
       this.filterPeople()
       this.filterPosts()
     }
+    if(this.props.location.pathname !== prevProps.location.pathname){
+      this.getProfile()
+    }
   }
 
   handleUpdate = () => {
