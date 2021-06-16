@@ -16,6 +16,7 @@ const api = process.env.REACT_APP_BE_URL;
 class Feed extends Component {
   state = {
     posts: [],
+    update: false,
   };
 
   componentDidMount = () => {
@@ -24,7 +25,7 @@ class Feed extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.updated !== this.state.updated) {
+    if (prevState.update !== this.state.update) {
       this.getPosts();
     }
   };
@@ -55,6 +56,7 @@ class Feed extends Component {
         // );
         this.setState({
           posts: resp.reverse(),
+          update: false,
         });
       }
     } catch (error) {
@@ -62,9 +64,8 @@ class Feed extends Component {
     }
   };
 
-  handleUpdate = (e, bool) => {
-    e.preventDefault();
-    this.props.onDidUpdate(bool);
+  handleUpdate = () => {
+    this.setState({ update: true });
   };
 
   render() {

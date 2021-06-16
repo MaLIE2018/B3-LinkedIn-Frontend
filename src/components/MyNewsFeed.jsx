@@ -14,10 +14,11 @@ import "../css/MyNewsFeed.css";
 import dateDiff from "../helper/datediff";
 import PostsModal from "./PostsModal";
 import MyLoader from "./ContentLoader";
-import { Link } from "react-router-dom";
-import Comments from "../components/Comments.jsx"
+import { Link, withRouter } from "react-router-dom";
+import Comments from "../components/Comments.jsx";
 
-
+const api = process.env.REACT_APP_BE_URL;
+const userId = localStorage.getItem("userId");
 
 class MyNewsFeed extends React.Component {
   state = {
@@ -29,36 +30,26 @@ class MyNewsFeed extends React.Component {
     currentPost: {
       text: "",
     },
-    
-
   };
 
   handleUpdatePost = async (e, method, id) => {
     e.preventDefault();
     try {
-      let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/posts/" + id,
-        {
-          method: method,
-          headers: {
-            Authorization: "Bearer " + this.props.bearerToken,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(this.state.post),
-        }
-      );
+      let response = await fetch(api + "/post/" + id, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.state.currentPost),
+      });
       if (response.ok) {
         console.log("Post successfully updated");
         if (this.state.formData !== undefined && method !== "DELETE") {
           const data = await response.json();
-          const id = data._id;
           let newRes = await fetch(
-            "https://striveschool-api.herokuapp.com/api/posts/" + id,
+            api + "/post/" + data[0].id + "/uploadPostImage",
             {
               method: "POST",
-              headers: {
-                Authorization: "Bearer " + this.props.bearerToken,
-              },
               body: this.state.formData,
             }
           );
@@ -66,7 +57,7 @@ class MyNewsFeed extends React.Component {
             console.log("FileUploaded");
           }
         }
-        this.props.onHandleUpdate(e, true);
+        this.props.onHandleUpdate();
       } else {
         console.log("Something went wrong!");
       }
@@ -79,7 +70,7 @@ class MyNewsFeed extends React.Component {
     e.preventDefault();
     const file = e.currentTarget.files[0];
     let form_data = new FormData();
-    form_data.append("post", file);
+    form_data.append("postImage", file);
     this.setState((state) => {
       return {
         formData: form_data,
@@ -113,9 +104,6 @@ class MyNewsFeed extends React.Component {
     });
   };
 
-  
-
-
   render() {
     const now = new Date();
     return (
@@ -132,10 +120,10 @@ class MyNewsFeed extends React.Component {
                       style={{ paddingLeft: "0", paddingRight: "0" }}>
                       <div className='d-flex flex-row'>
                         <Col className='pl-0'>
-                          <a as={Link} href={`/profile/${post.user?._id}`}>
+                          <a as={Link} href={`/profile/${post.profile?.id}`}>
                             {" "}
                             <span className='font-weight-bolder'>
-                              {post.user?.name}{" "}
+                              {post.profile?.name}{" "}
                             </span>
                           </a>
 
@@ -144,16 +132,18 @@ class MyNewsFeed extends React.Component {
                             style={{ fontSize: "0.8rem" }}>
                             like this.
                           </span>
-                          <EllipsisHorizontalOutline
-                            color={"#808080"}
-                            title={"thumb"}
-                            height='25px'
-                            width='25px'
-                            className='float-right btn'
-                            onClick={(e) =>
-                              this.handleEditButtonClick(e, state.item)
-                            }
-                          />
+                          {userId == post.profileId && (
+                            <EllipsisHorizontalOutline
+                              color={"#808080"}
+                              title={"thumb"}
+                              height='25px'
+                              width='25px'
+                              className='float-right btn'
+                              onClick={(e) =>
+                                this.handleEditButtonClick(e, state.item)
+                              }
+                            />
+                          )}
                         </Col>
                       </div>
                       <hr></hr>
@@ -171,9 +161,9 @@ class MyNewsFeed extends React.Component {
                         </Col>
                         <Col md={11} className='ml-2'>
                           <div>
-                            <a as={Link} href={`/profile/${post.user?._id}`}>
+                            <a as={Link} href={`/profile/${post.profile?._id}`}>
                               <span className='font-weight-bolder'>
-                                {post.user?.name}
+                                {post.profile?.name}
                               </span>
                             </a>
 
@@ -186,7 +176,7 @@ class MyNewsFeed extends React.Component {
                             className='text-muted'
                             style={{ fontSize: "0.8rem" }}>
                             <span>{dateDiff(post.createdAt, now)}</span>
-                            {post.user?.title}
+                            {post.profile?.title}
                           </div>
                         </Col>
                       </div>
@@ -220,13 +210,15 @@ class MyNewsFeed extends React.Component {
                           />
                           Like
                         </Col>
-                        <Col md={2} className='d-flex flex-row' onClick={state.onHandleComment}>
+                        <Col
+                          md={2}
+                          className='d-flex flex-row'
+                          onClick={state.onHandleComment}>
                           <ChatbubblesOutline
                             color={"#808080"}
                             title={"thumb"}
                             height='25px'
                             width='25px'
-
                           />
                           Comment
                         </Col>
@@ -250,12 +242,11 @@ class MyNewsFeed extends React.Component {
                         </Col>
                       </div>
                     </ListGroup.Item>
-                    {state.showComments && <ListGroup.Item className="p-0 pt-3">
-
-                    
-                      
+                    {state.showComments && (
+                      <ListGroup.Item className='p-0 pt-3'>
                         <Comments postId={12}></Comments>
-                    </ListGroup.Item>}
+                      </ListGroup.Item>
+                    )}
                   </ListGroup>
                 </>
               )}
@@ -284,4 +275,4 @@ class MyNewsFeed extends React.Component {
   }
 }
 
-export default MyNewsFeed;
+export default withRouter(MyNewsFeed);
