@@ -1,5 +1,12 @@
 import React from "react";
-import { Col, ListGroup, Spinner, Form, FormControl } from "react-bootstrap";
+import {
+  Col,
+  ListGroup,
+  Spinner,
+  Form,
+  FormControl,
+  Button,
+} from "react-bootstrap";
 import {
   ThumbsUpOutline,
   ChatbubblesOutline,
@@ -153,7 +160,7 @@ class MyNewsFeed extends React.Component {
                       <div className='d-flex flex-row'>
                         <Col md={1} className='pl-0'>
                           <img
-                            src={post.user?.image}
+                            src={post.profile?.image}
                             alt=''
                             className={"rounded-circle"}
                             style={{ height: "50px" }}
@@ -161,7 +168,7 @@ class MyNewsFeed extends React.Component {
                         </Col>
                         <Col md={11} className='ml-2'>
                           <div>
-                            <a as={Link} href={`/profile/${post.profile?._id}`}>
+                            <a as={Link} href={`/profile/${post.profile?.id}`}>
                               <span className='font-weight-bolder'>
                                 {post.profile?.name}
                               </span>
@@ -193,7 +200,9 @@ class MyNewsFeed extends React.Component {
                       </div>
                       <div style={{ fontSize: "0.8rem" }} className='mt-5'>
                         <img src={comments} alt='comment' /> <a href='/'>35 </a>
-                        <a href='/'>23 comments</a>
+                        <Button variant='link' onClick={state.onHandleComment}>
+                          23 comments
+                        </Button>
                       </div>
                     </ListGroup.Item>
                     <ListGroup.Item
@@ -210,17 +219,19 @@ class MyNewsFeed extends React.Component {
                           />
                           Like
                         </Col>
-                        <Col
-                          md={2}
-                          className='d-flex flex-row'
-                          onClick={state.onHandleComment}>
-                          <ChatbubblesOutline
-                            color={"#808080"}
-                            title={"thumb"}
-                            height='25px'
-                            width='25px'
-                          />
-                          Comment
+                        <Col md={2} className=''>
+                          <Button
+                            variant='link'
+                            onClick={state.onHandleComment}
+                            className='d-flex flex-row'>
+                            <ChatbubblesOutline
+                              color={"#808080"}
+                              title={"thumb"}
+                              height='25px'
+                              width='25px'
+                            />
+                            Comment
+                          </Button>
                         </Col>
                         <Col md={2} className='d-flex flex-row ml-5'>
                           <ArrowRedoOutline
@@ -244,7 +255,9 @@ class MyNewsFeed extends React.Component {
                     </ListGroup.Item>
                     {state.showComments && (
                       <ListGroup.Item className='p-0 pt-3'>
-                        <Comments postId={12}></Comments>
+                        <Comments
+                          userImage={this.props.profile.image}
+                          postId={post.id}></Comments>
                       </ListGroup.Item>
                     )}
                   </ListGroup>
@@ -261,7 +274,7 @@ class MyNewsFeed extends React.Component {
         <PostsModal
           currentPost={this.state.currentPost}
           onHandleUpdatePost={this.handleUpdatePost}
-          currentProfileId={this.props.profile._id}
+          currentProfileId={this.props.profile.id}
           onHandleFileUpload={this.handleFileUpload}
           open={this.state.showModal}
           onHandleShowModal={this.handleShowModal}

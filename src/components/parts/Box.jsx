@@ -13,9 +13,8 @@ class Box extends Component {
       openCollapse: false,
       item: this.props.item,
       showComments: false,
-     
+
       onHandleComment: this.handleComments,
-     
     };
   }
 
@@ -24,10 +23,8 @@ class Box extends Component {
   };
 
   handleComments = () => {
-    this.setState({ showComments: !this.state.showComments })
-    console.log("hELLO MAX ")
-  }
-
+    this.setState({ showComments: !this.state.showComments });
+  };
 
   render() {
     const title = this.props?.title;
