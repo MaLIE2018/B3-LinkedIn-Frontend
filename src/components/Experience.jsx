@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import Box from "../components/parts/Box";
 import ItemsList from "../components/parts/ItemsList";
 import ModalExperience from "./ModelExperience";
+
+const api = process.env.REACT_APP_BE_URL;
+const userId = localStorage.getItem("userId");
+
 class Experience extends Component {
   state = {
     experiences: [],
@@ -18,15 +22,10 @@ class Experience extends Component {
 
   postExp = async () => {
     try {
-      const identity = this.props.profileId;
-      const newUrl =
-        "https://striveschool-api.herokuapp.com/api/profile/" +
-        identity +
-        "/experiences";
+      const newUrl = api + "/experience/" + userId + "/user";
       const response = await fetch(newUrl, {
         method: "GET",
         headers: {
-          Authorization: "Bearer " + this.props.bearerToken,
           "Content-Type": "application/json",
         },
       });

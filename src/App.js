@@ -10,6 +10,9 @@ import Search from './pages/Search'
 import Ad from './components/Ad';
 import { expsUrl, getExperiences, getProfiles } from './helper/fetchData';
 import { checkImg } from './helper/datediff';
+
+const api = process.env.REACT_APP_BE_URL
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -31,37 +34,37 @@ class App extends React.Component {
   // 609a5eb3dfccc50015a6bbba Ankit
   // Hasib eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDk4ZmE0MTYxOWU1ZDAwMTUxZjhmN2YiLCJpYXQiOjE2MjA2MzgyNzMsImV4cCI6MTYyMTg0Nzg3M30.D-RniP4L8eJ8XOdOjRXswq8LsRnPVK-QYiUr8h9fPhk
 
-  filterPeople = () => {
-    let query = this.state.query
-    let filteredPeople = this.state.profiles.filter(p => {
-      if (p.name.toLowerCase().includes(query.toLowerCase()) || p.surname.toLowerCase().includes(query.toLowerCase())) {
-        return true}
-    })
+  // filterPeople = () => {
+  //   let query = this.state.query
+  //   let filteredPeople = this.state.profiles.filter(p => {
+  //     if (p.name.toLowerCase().includes(query.toLowerCase()) || p.surname.toLowerCase().includes(query.toLowerCase())) {
+  //       return true}
+  //   })
 
-    this.setState((state) => {
-      return {
-        filteredPeople: filteredPeople
-      }
-    })
-  }
+  //   this.setState((state) => {
+  //     return {
+  //       filteredPeople: filteredPeople
+  //     }
+  //   })
+  // }
 
-  filterPosts = () => {
-    let query = this.state.query
-    let filteredPosts = this.state.posts.filter(p => {
-      if (p.text.toLowerCase().includes(query.toLowerCase()) ) {
-        return true}
-    })
+  // filterPosts = () => {
+  //   let query = this.state.query
+  //   let filteredPosts = this.state.posts.filter(p => {
+  //     if (p.text.toLowerCase().includes(query.toLowerCase()) ) {
+  //       return true}
+  //   })
 
-    this.setState((state) => {
-      return {
-        filteredPosts: filteredPosts
-      }
-    })
-  }
+  //   this.setState((state) => {
+  //     return {
+  //       filteredPosts: filteredPosts
+  //     }
+  //   })
+  // }
   getMyProfile = async () => {
     try {
       const requestProfile = await fetch(
-        'https://striveschool-api.herokuapp.com/api/profile/me',
+        api +'/profile/1',
         {
           method: 'GET',
           headers: {
@@ -81,7 +84,7 @@ class App extends React.Component {
   getProfile = async () => {
     try {
       const requestProfile = await fetch(
-        'https://striveschool-api.herokuapp.com/api/profile/'+ this.state.currProfileId,
+        api +'/profile/'+ this.state.currProfileId,
         {
           method: 'GET',
           headers: {
@@ -125,14 +128,14 @@ class App extends React.Component {
   async componentDidMount() {
     this.getMyProfile();
     this.getPosts()
-    let profiles = await getProfiles(this.state.bearerToken)
-    this.setState((state) => {return { 
-      profiles: profiles
-    }})
-    let exps = await getExperiences(this.state.bearerToken, expsUrl)
-    this.setState((state) => {return { 
-      experiences: exps
-    }})
+    // let profiles = await getProfiles(this.state.bearerToken)
+    // this.setState((state) => {return { 
+    //   profiles: profiles
+    // }})
+    // let exps = await getExperiences(this.state.bearerToken, expsUrl)
+    // this.setState((state) => {return { 
+    //   experiences: exps
+    // }})
   }
   componentDidUpdate(prevProps, prevState){
     if (this.state.didUpdate !== prevState.didUpdate){
@@ -169,6 +172,7 @@ class App extends React.Component {
   }
 
 	render(){
+  localStorage.setItem('userId',1)
 	return (
 		<>
 		<Router>
