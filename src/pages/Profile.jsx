@@ -26,7 +26,7 @@ class Profile extends Component {
   };
 
   render() {
-    const profileId = this.props.profile._id;
+    const profileId = this.props.profile.id;
     return (
       <>
         {" "}
