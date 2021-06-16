@@ -16,7 +16,7 @@ const Comments = (props) => {
             const res = await fetch(`${ApiURL}/comments/${props.postId}/post`)
             const data = await res.json()
 
-            setComments(data)
+            setComments(data.reverse())
             setUpdate(false)
 
 
