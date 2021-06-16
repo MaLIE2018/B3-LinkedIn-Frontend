@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Box from "./parts/Box";
 import ItemsList from "./parts/ItemsList";
-import people from "../data/people.json";
 
 const api = process.env.REACT_APP_BE_URL;
 

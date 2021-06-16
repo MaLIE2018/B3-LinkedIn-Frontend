@@ -10,10 +10,13 @@ import {
   ImageOutline,
 } from "react-ionicons";
 
+const userId = localStorage.getItem("userId");
+const api = process.env.REACT_APP_BE_URL;
 class Posts extends Component {
   state = {
     post: {
       text: "",
+      profileId: userId,
     },
     formData: undefined,
     showModal: false,
@@ -23,28 +26,20 @@ class Posts extends Component {
     e.preventDefault();
     if (this.state.post.text.length >= 10) {
       try {
-        let response = await fetch(
-          "https://striveschool-api.herokuapp.com/api/posts/",
-          {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer " + this.props.bearerToken,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.state.post),
-          }
-        );
+        let response = await fetch(api + "/post/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.state.post),
+        });
         if (response.ok) {
           if (this.state.formData !== undefined) {
             const data = await response.json();
-            const id = data._id;
             let newRes = await fetch(
-              "https://striveschool-api.herokuapp.com/api/posts/" + id,
+              api + "/post/" + data.id + "/uploadPostImage",
               {
                 method: "POST",
-                headers: {
-                  Authorization: "Bearer " + this.props.bearerToken,
-                },
                 body: this.state.formData,
               }
             );
@@ -66,7 +61,7 @@ class Posts extends Component {
     e.preventDefault();
     const file = e.currentTarget.files[0];
     let form_data = new FormData();
-    form_data.append("post", file);
+    form_data.append("postImage", file);
     this.setState((state) => {
       return {
         formData: form_data,
@@ -77,7 +72,7 @@ class Posts extends Component {
   handleChange = (e) => {
     this.setState((state) => {
       return {
-        post: { text: e.target.value },
+        post: { ...state.post, text: e.target.value },
       };
     });
   };
