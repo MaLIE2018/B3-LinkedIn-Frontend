@@ -30,6 +30,7 @@ class App extends React.Component {
       filteredPosts: [],
       filteredPeople:[],
     };
+  
   }
   // 609a5eb3dfccc50015a6bbba Ankit
   // Hasib eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDk4ZmE0MTYxOWU1ZDAwMTUxZjhmN2YiLCJpYXQiOjE2MjA2MzgyNzMsImV4cCI6MTYyMTg0Nzg3M30.D-RniP4L8eJ8XOdOjRXswq8LsRnPVK-QYiUr8h9fPhk
@@ -80,7 +81,6 @@ class App extends React.Component {
       console.log(error);
     }
   };
-
   getProfile = async () => {
     try {
       const requestProfile = await fetch(
@@ -156,7 +156,6 @@ class App extends React.Component {
       return { didUpdate: bool };
     });
   };
-
   handleChangeQuery = (e) => {
       e.preventDefault();
       this.setState((state) => {
@@ -170,7 +169,6 @@ class App extends React.Component {
           
       })
   }
-
 	render(){
   localStorage.setItem('userId',1)
 	return (
@@ -217,10 +215,10 @@ class App extends React.Component {
 										bearerToken={this.state.bearerToken}
                   />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
 			
-				<Footer />
-			</Container>
-			</Router>
-		</>
+	// 			<Footer />
+	// 		</Container>
+	// 		</Router>
+	// 	</>
 	);
 }
 }

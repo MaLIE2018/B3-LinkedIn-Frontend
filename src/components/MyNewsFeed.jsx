@@ -15,6 +15,7 @@ import dateDiff from "../helper/datediff";
 import PostsModal from "./PostsModal";
 import MyLoader from "./ContentLoader";
 import { Link } from "react-router-dom";
+
 class MyNewsFeed extends React.Component {
   state = {
     post: {
