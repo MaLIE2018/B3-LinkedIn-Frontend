@@ -22,7 +22,6 @@ function UpdateImgProfileModal(props) {
   const handleUploadClick = (e) => {
     props.onHandleShowModal();
     props.onUploadClick();
-    props.onDidUpdate(true);
   };
 
   return (

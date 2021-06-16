@@ -18,6 +18,9 @@ import {
 import mainLogo from "../assets/img/Logo.png";
 import "../css/MyNavbar.css";
 import FilterBar from "./FilterBar";
+
+const userId = localStorage.getItem("userId");
+
 class MyNavbar extends React.Component {
   state = { filter: "" };
 
@@ -154,7 +157,7 @@ class MyNavbar extends React.Component {
                     }
                   </span>
                   <NavDropdown title='Me' id='basic-nav-dropdown'>
-                    <NavDropdown.Item as={Link} to='/profile'>
+                    <NavDropdown.Item as={Link} to={`/profile/${userId}`}>
                       {this.props.name}
                     </NavDropdown.Item>
                     <NavDropdown.Item href='#action/3.2'>
