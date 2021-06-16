@@ -99,7 +99,18 @@ class Experience extends Component {
           </>
         )}
       />
-    ) : null;
+    ) : (
+      <Box
+        add={true}
+        onEditButtonClick={this.handleEditButtonClick}
+        title='Experience'
+        render={(state) => (
+          <>
+            <div>Add an Experience</div>
+          </>
+        )}
+      />
+    );
   }
 }
 
