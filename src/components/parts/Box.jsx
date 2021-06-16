@@ -12,12 +12,22 @@ class Box extends Component {
       edit: true,
       openCollapse: false,
       item: this.props.item,
+      showComments: false,
+     
+      onHandleComment: this.handleComments,
+     
     };
   }
 
   handleOpenCollapse = (bool) => {
     this.setState((state) => ({ openCollapse: bool }));
   };
+
+  handleComments = () => {
+    this.setState({ showComments: !this.state.showComments })
+    console.log("hELLO MAX ")
+  }
+
 
   render() {
     const title = this.props?.title;
