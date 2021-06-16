@@ -9,17 +9,23 @@ import { CaretDownOutline } from "react-ionicons";
 import WelcomeBox from "./../components/WelcomeBox";
 import Groups from "./../components/Groups";
 import LatestJobs from "./../components/LatestJobs";
+import { checkImg } from "../helper/datediff";
+
+const api = process.env.REACT_APP_BE_URL;
+
 class Feed extends Component {
   state = {
     posts: [],
+    update: false,
   };
 
   componentDidMount = () => {
     document.title = "Linkedin - Feed";
+    this.getPosts();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.updated !== this.state.updated) {
+    if (prevState.update !== this.state.update) {
       this.getPosts();
     }
   };
@@ -30,17 +36,36 @@ class Feed extends Component {
     this.setState((state) => {
       return {
         posts: posts.filter((post) => {
-          if (post.user?._id) {
-            return post.user._id === this.props.profile._id;
+          if (post.user?.id) {
+            return post.user.id === this.props.profile.id;
           }
         }),
       };
     });
   };
 
-  handleUpdate = (e, bool) => {
-    e.preventDefault();
-    this.props.onDidUpdate(bool);
+  getPosts = async () => {
+    try {
+      const requestPosts = await fetch(api + "/post/", {
+        method: "GET",
+      });
+      if (requestPosts.ok) {
+        let resp = await requestPosts.json();
+        // let filteredResp = await Promise.all(
+        //   resp.filter(async (post) => await checkImg(post.image))
+        // );
+        this.setState({
+          posts: resp.reverse(),
+          update: false,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  handleUpdate = () => {
+    this.setState({ update: true });
   };
 
   render() {
@@ -82,7 +107,7 @@ class Feed extends Component {
           </Row>
 
           <MyNewsFeed
-            posts={this.props.posts}
+            posts={this.state.posts}
             bearerToken={this.props.bearerToken}
             profile={this.props.profile}
             rounded={true}

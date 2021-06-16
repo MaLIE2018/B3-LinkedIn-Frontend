@@ -1,14 +1,30 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "./parts/Box";
 import ItemsList from "./parts/ItemsList";
-import people from "../data/people.json";
-class AddToYourFeed extends Component {
-  componentDidMount() {
-    try {
-    } catch (error) {}
-  }
 
-  render() {
+const api = process.env.REACT_APP_BE_URL;
+
+const AddToYourFeed = () => {
+  const [profiles, setProfiles] = useState([]);
+  const getProfiles = async () => {
+    try {
+      const requestProfile = await fetch(api + "/profile/", {
+        method: "GET",
+        headers: {},
+      });
+      if (requestProfile.ok) {
+        const response = await requestProfile.json();
+        setProfiles(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getProfiles();
+  }, []);
+
+  if (profiles.length > 0) {
     return (
       <Box
         title={
@@ -21,13 +37,15 @@ class AddToYourFeed extends Component {
           <ItemsList
             rounded={true}
             follow={true}
-            items={people}
+            items={profiles}
             open={open.openCollapse}
           />
         )}
       />
     );
+  } else {
+    return "Loading";
   }
-}
+};
 
 export default AddToYourFeed;

@@ -4,25 +4,24 @@ import MyNavbar from './components/MyNavbar';
 import Footer from './components/Footer';
 import './css/App.css';
 import Feed from './pages/Feed'
-import {BrowserRouter as Router,Route, Switch} from "react-router-dom"
 import React from "react"
 import Search from './pages/Search'
 import Ad from './components/Ad';
 import { expsUrl, getExperiences, getProfiles } from './helper/fetchData';
-import { checkImg } from './helper/datediff';
+
+import { Route, Switch, withRouter } from 'react-router-dom';
 
 const api = process.env.REACT_APP_BE_URL
 
+const userId = localStorage.getItem("userId")
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       didUpdate: false,
-      myProfile: [],
-      bearerToken:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGM3MDYwMzI5MTkzMDAwMTU2MGFiOTIiLCJpYXQiOjE2MjM2NTU5MzksImV4cCI6MTYyNDg2NTUzOX0.EDhAt-Kg9toNC0cxxxkPVdVeVF6ZJ7CzNe4ha6924mM",
       posts:[],
       query: "",
+      profile: {},
       currProfile:[],
       currProfileId: undefined,
       profiles: [],
@@ -62,72 +61,35 @@ class App extends React.Component {
   //     }
   //   })
   // }
-  getMyProfile = async () => {
-    try {
-      const requestProfile = await fetch(
-        api +'/profile/1',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: 'Bearer ' + this.state.bearerToken,
-          },
-        }
-      );
-      if (requestProfile.ok) {
-        const response = await requestProfile.json();
-        this.setState({ myProfile: response, didUpdate: false });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   getProfile = async () => {
     try {
-      const requestProfile = await fetch(
-        api +'/profile/'+ this.state.currProfileId,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: 'Bearer ' + this.state.bearerToken,
-          },
-        }
-      );
-      if (requestProfile.ok) {
-        const response = await requestProfile.json();
-        this.setState({ currProfile: response, didUpdate: false });
+      const res = await fetch(api +'/profile/' + this.state.currProfileId);
+      console.log("Test")
+      if (res.ok) {
+        this.setState({ currProfile: await res.json(), didUpdate: false });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  getPosts = async () => {
+  getMyProfile = async () => {
     try {
-      const requestPosts = await fetch(
-        "https://striveschool-api.herokuapp.com/api/posts/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + this.state.bearerToken,
-          },
-        }
-      );
-      if (requestPosts.ok) {
-        let resp = await requestPosts.json();
-        let filteredResp = await Promise.all(resp.filter( async (post) => await checkImg(post.image)))
-        this.setState({
-          posts: filteredResp.reverse(),
-          didUpdate: false,
-        });
+      const res = await fetch(api +'/profile/' + userId);
+      console.log("Test")
+      if (res.ok) {
+        this.setState({ profile: await res.json(), didUpdate: false });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  async componentDidMount() {
-    this.getMyProfile();
-    this.getPosts()
+  componentDidMount() {
+    this.setState({currProfileId: this.props.location.pathname.match(/\d+/)})
+    this.getProfile()
+    this.getMyProfile()
     // let profiles = await getProfiles(this.state.bearerToken)
     // this.setState((state) => {return { 
     //   profiles: profiles
@@ -139,7 +101,6 @@ class App extends React.Component {
   }
   componentDidUpdate(prevProps, prevState){
     if (this.state.didUpdate !== prevState.didUpdate){
-      this.getMyProfile()
       this.getPosts()
     }
     if(prevState.currProfileId !== this.state.currProfileId){
@@ -151,9 +112,9 @@ class App extends React.Component {
     }
   }
 
-  handleUpdate = (bool) => {
+  handleUpdate = () => {
     this.setState((state) => {
-      return { didUpdate: bool };
+      return { didUpdate: true };
     });
   };
   handleChangeQuery = (e) => {
@@ -169,58 +130,47 @@ class App extends React.Component {
           
       })
   }
-	render(){
+	render(){ 
   localStorage.setItem('userId',1)
 	return (
 		<>
-		<Router>
-			<MyNavbar name={this.state.myProfile.name} 
-      image={this.state.myProfile.image}
+			<MyNavbar name={this.state.profile.name} 
+      image={this.state.profile.image}
       query={this.state.query}
       onChangeQuery={this.handleChangeQuery}/>
-			<Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" 
-      >
+			<Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
         {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
         developers in 48 hours. $0
           Recruiting fee. Start now."/>}
-      <Switch>
-			<Route render={(routerProps) => <Profile
-										profile={this.state.myProfile}
-										bearerToken={this.state.bearerToken}
-                    onDidUpdate={this.handleUpdate}
-                  />} exact path={["/profile"]}/>
-      <Route render={(routerProps) => <Profile
-										profile={this.state.currProfile}
-										bearerToken={this.state.bearerToken}
-                    onDidUpdate={this.handleUpdate}
-                    currProfileId={this.state.currProfileId}
-                    onCurrProfileChange={this.handleCurrProfileChange}
-                  />} path={["/profile/:id"]}/>
-      </Switch>
-			<Route render={(routerProps) => <Feed
-										profile={this.state.myProfile}
-                    posts={this.state.posts}
-										bearerToken={this.state.bearerToken}
-                    onDidUpdate={this.handleUpdate}
-                  />} exact path={["/feed","/"]}/>
-      <Route render={(routerProps) => <Search
-                    profiles = {this.state.filteredPeople.length !== 0?
-                      this.state.filteredPeople
-                      :
-                      this.state.profiles}
-                    posts={this.state.filteredPosts.length !== 0?
-                      this.state.filteredPosts
-                      :
-                      this.state.posts}
-										bearerToken={this.state.bearerToken}
-                  />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
-			
-	// 			<Footer />
-	// 		</Container>
-	// 		</Router>
-	// 	</>
+        <Switch>
+        <Route render={(routerProps) => <Profile
+                      profile={this.state.currProfile}
+                      onDidUpdate={this.handleUpdate}
+                      currProfileId={this.state.currProfileId}
+                      onCurrProfileChange={this.handleCurrProfileChange}
+                    />} path={["/profile/:id"]}/>
+        </Switch>
+        <Route render={(routerProps) => <Feed
+                      profile={this.state.profile}
+
+                    />} exact path={["/feed","/"]}/>
+        <Route render={(routerProps) => <Search
+                      profiles = {this.state.filteredPeople.length !== 0?
+                        this.state.filteredPeople
+                        :
+                        this.state.profiles}
+                      posts={this.state.filteredPosts.length !== 0?
+                        this.state.filteredPosts
+                        :
+                        this.state.posts}
+                      bearerToken={this.state.bearerToken}
+                    />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+        
+	    <Footer/>
+      </Container>
+	</>
 	);
 }
 }
 
-export default App;
+export default withRouter(App);

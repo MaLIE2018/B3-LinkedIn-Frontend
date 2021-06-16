@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import Box from "../components/parts/Box";
 import ItemsList from "../components/parts/ItemsList";
 import ModalExperience from "./ModelExperience";
 
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
+let userId = localStorage.getItem("userId");
 
 class Experience extends Component {
   state = {
@@ -21,6 +22,8 @@ class Experience extends Component {
   }
 
   postExp = async () => {
+    const id = this.props.match.params?.id;
+    if (id) userId = id;
     try {
       const newUrl = api + "/experience/" + userId + "/user";
       const response = await fetch(newUrl, {
@@ -32,7 +35,12 @@ class Experience extends Component {
       if (response.ok) {
         const data = await response.json();
         this.setState((state) => {
-          return { experiences: data, updated: false };
+          return {
+            experiences: data.sort((a, b) =>
+              a.startDate > b.startDate ? -1 : 1
+            ),
+            updated: false,
+          };
         });
       }
     } catch (error) {
@@ -91,8 +99,19 @@ class Experience extends Component {
           </>
         )}
       />
-    ) : null;
+    ) : (
+      <Box
+        add={true}
+        onEditButtonClick={this.handleEditButtonClick}
+        title='Experience'
+        render={(state) => (
+          <>
+            <div>Add an Experience</div>
+          </>
+        )}
+      />
+    );
   }
 }
 
-export default Experience;
+export default withRouter(Experience);
