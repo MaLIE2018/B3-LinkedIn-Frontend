@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, ListGroup, Spinner } from "react-bootstrap";
+import { Col, ListGroup, Spinner, Form, FormControl } from "react-bootstrap";
 import {
   ThumbsUpOutline,
   ChatbubblesOutline,
@@ -15,6 +15,10 @@ import dateDiff from "../helper/datediff";
 import PostsModal from "./PostsModal";
 import MyLoader from "./ContentLoader";
 import { Link } from "react-router-dom";
+import Comments from "../components/Comments.jsx"
+
+
+
 class MyNewsFeed extends React.Component {
   state = {
     post: {
@@ -25,6 +29,8 @@ class MyNewsFeed extends React.Component {
     currentPost: {
       text: "",
     },
+    
+
   };
 
   handleUpdatePost = async (e, method, id) => {
@@ -107,14 +113,17 @@ class MyNewsFeed extends React.Component {
     });
   };
 
+  
+
+
   render() {
     const now = new Date();
     return (
       <>
         {this.props.posts.length > 0 ? (
-          this.props.posts.map((post) => (
+          this.props.posts.slice(0, 7).map((post) => (
             <Box
-              key={post._id}
+              key={post.id}
               item={post}
               render={(state) => (
                 <>
@@ -211,12 +220,13 @@ class MyNewsFeed extends React.Component {
                           />
                           Like
                         </Col>
-                        <Col md={2} className='d-flex flex-row'>
+                        <Col md={2} className='d-flex flex-row' onClick={state.onHandleComment}>
                           <ChatbubblesOutline
                             color={"#808080"}
                             title={"thumb"}
                             height='25px'
                             width='25px'
+
                           />
                           Comment
                         </Col>
@@ -240,6 +250,12 @@ class MyNewsFeed extends React.Component {
                         </Col>
                       </div>
                     </ListGroup.Item>
+                    {state.showComments && <ListGroup.Item className="p-0 pt-3">
+
+                    
+                      
+                        <Comments postId={12}></Comments>
+                    </ListGroup.Item>}
                   </ListGroup>
                 </>
               )}
