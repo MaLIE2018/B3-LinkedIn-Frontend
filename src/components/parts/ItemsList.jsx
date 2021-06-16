@@ -17,7 +17,7 @@ class ItemsList extends Component {
       <ListGroup variant='flush'>
         {chunks[0].map((item) => (
           <ListItem
-            key={item._id}
+            key={item.id}
             rounded={this.props.rounded}
             item={item}
             edit={this.props.edit}
@@ -34,7 +34,7 @@ class ItemsList extends Component {
                 {chunks[1].map((item) => {
                   return (
                     <ListItem
-                      key={item._id}
+                      key={item.id}
                       rounded={this.props.rounded}
                       item={item}
                       edit={this.props.edit}

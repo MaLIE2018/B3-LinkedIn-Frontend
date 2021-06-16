@@ -3,13 +3,15 @@ import "../css/ProfileTop.css";
 import { Row, Col, Button } from "react-bootstrap";
 import CarouselBadge from "../components/parts/Carousel";
 import CameraIcon from "../components/parts/CamerIcon";
-import PencilIcon from "../components/parts/PencilIcon";
 import Box from "../components/parts/Box";
 import LinkButton from "../components/parts/LinkButton";
 import DropdownButton from "../components/parts/DropdownButton";
 import UpdateImgProfileModal from "./UpdateImgProfileModal";
 import EditProfile from "./EditProfile";
+import EditButton from "./parts/EditButton";
 
+const api = process.env.REACT_APP_BE_URL;
+const userId = localStorage.getItem("userId");
 export default class ProfileTop extends Component {
   state = {
     showModal: false,
@@ -30,7 +32,7 @@ export default class ProfileTop extends Component {
     e.preventDefault();
     const file = e.currentTarget.files[0];
     let form_data = new FormData();
-    form_data.append("profile", file);
+    form_data.append("profileImage", file);
     this.setState((state) => {
       return {
         formData: form_data,
@@ -40,18 +42,13 @@ export default class ProfileTop extends Component {
 
   uploadImage = async () => {
     try {
-      let newRes = await fetch(
-        `https://striveschool-api.herokuapp.com/api/profile/${this.props.profile.id}/picture`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: "Bearer " + this.props.bearerToken,
-          },
-          body: this.state.formData,
-        }
-      );
+      let newRes = await fetch(api + `/profile/${userId}/uploadProfileImage`, {
+        method: "POST",
+        body: this.state.formData,
+      });
       if (newRes.ok) {
         console.log("FileUploaded");
+        this.props.onDidUpdate();
       }
     } catch (error) {
       console.log("something went wrong");
@@ -79,7 +76,7 @@ export default class ProfileTop extends Component {
                   editProfileOn={() => this.setState({ editProfile: true })}
                   token={this.props.bearerToken}
                 />
-                <PencilIcon
+                <EditButton
                   classname={"Pencil"}
                   editProfileOn={() => this.setState({ editProfile: true })}
                 />
@@ -131,7 +128,6 @@ export default class ProfileTop extends Component {
           onHandleFileUpload={this.handleFileUpload}
           uploadImageUrl={this.state.uploadImageUrl}
           onUploadClick={this.uploadImage}
-          onDidUpdate={this.props.onDidUpdate}
         />
       </>
     );

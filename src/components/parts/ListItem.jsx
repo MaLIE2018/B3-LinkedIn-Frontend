@@ -29,7 +29,7 @@ class ListItem extends Component {
           <Col md={10} className='ml-2'>
             {/* If this prop exist its a person */}
             {this.props.item.name && (
-              <a as={Link} href={`/profile/${this.props.item._id}`}>
+              <a as={Link} href={`/profile/${this.props.item.id}`}>
                 <div className='font-weight-bold d-flex flex-row'>
                   {this.props.item.name} {" · "}
                   <span className='text-muted font-weight-light'>2nd</span>

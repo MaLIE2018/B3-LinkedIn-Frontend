@@ -9,6 +9,10 @@ import { CaretDownOutline } from "react-ionicons";
 import WelcomeBox from "./../components/WelcomeBox";
 import Groups from "./../components/Groups";
 import LatestJobs from "./../components/LatestJobs";
+import { checkImg } from "../helper/datediff";
+
+const api = process.env.REACT_APP_BE_URL;
+
 class Feed extends Component {
   state = {
     posts: [],
@@ -16,6 +20,7 @@ class Feed extends Component {
 
   componentDidMount = () => {
     document.title = "Linkedin - Feed";
+    this.getPosts();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -30,12 +35,31 @@ class Feed extends Component {
     this.setState((state) => {
       return {
         posts: posts.filter((post) => {
-          if (post.user?._id) {
-            return post.user._id === this.props.profile._id;
+          if (post.user?.id) {
+            return post.user.id === this.props.profile.id;
           }
         }),
       };
     });
+  };
+
+  getPosts = async () => {
+    try {
+      const requestPosts = await fetch(api + "/post/", {
+        method: "GET",
+      });
+      if (requestPosts.ok) {
+        let resp = await requestPosts.json();
+        // let filteredResp = await Promise.all(
+        //   resp.filter(async (post) => await checkImg(post.image))
+        // );
+        this.setState({
+          posts: resp.reverse(),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   handleUpdate = (e, bool) => {
@@ -82,7 +106,7 @@ class Feed extends Component {
           </Row>
 
           <MyNewsFeed
-            posts={this.props.posts}
+            posts={this.state.posts}
             bearerToken={this.props.bearerToken}
             profile={this.props.profile}
             rounded={true}
