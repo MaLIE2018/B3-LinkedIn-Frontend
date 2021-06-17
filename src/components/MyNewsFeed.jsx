@@ -1,28 +1,11 @@
 import React from "react";
-import {
-  Col,
-  ListGroup,
-  Button,
-} from "react-bootstrap";
-import {
-  ThumbsUpOutline,
-  ChatbubblesOutline,
-  ArrowRedoOutline,
-  SendOutline,
-  EllipsisHorizontalOutline,
-} from "react-ionicons";
-
-import Box from "./parts/Box";
-import comments from "../assets/img/comments.PNG";
 import "../css/MyNewsFeed.css";
-import dateDiff from "../helper/datediff";
 import PostsModal from "./PostsModal";
+import { withRouter } from "react-router-dom";
+import PostBox from "./PostBox";
 import MyLoader from "./ContentLoader";
-import { Link, withRouter } from "react-router-dom";
-import Comments from "../components/Comments.jsx";
 
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
 
 class MyNewsFeed extends React.Component {
   state = {
@@ -109,164 +92,14 @@ class MyNewsFeed extends React.Component {
   };
 
   render() {
-    const now = new Date();
     return (
       <>
         {this.props.posts.length > 0 ? (
-          this.props.posts.slice(0, 7).map((post) => (
-            <Box
-              key={post.id}
-              item={post}
-              render={(state) => (
-                <>
-                  <ListGroup>
-                    <ListGroup.Item
-                      style={{ paddingLeft: "0", paddingRight: "0" }}>
-                      <div className='d-flex flex-row'>
-                        <Col className='pl-0'>
-                          <a as={Link} href={`/profile/${post.profile?.id}`}>
-                            {" "}
-                            <span className='font-weight-bolder'>
-                              {post.profile?.name}{" "}
-                            </span>
-                          </a>
-
-                          <span
-                            className='font-weight-lighter'
-                            style={{ fontSize: "0.8rem" }}>
-                            like this.
-                          </span>
-                          {userId === post.profileId && (
-                            <EllipsisHorizontalOutline
-                              color={"#808080"}
-                              title={"thumb"}
-                              height='25px'
-                              width='25px'
-                              className='float-right btn'
-                              onClick={(e) =>
-                                this.handleEditButtonClick(e, state.item)
-                              }
-                            />
-                          )}
-                        </Col>
-                      </div>
-                      <hr></hr>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                      style={{ paddingLeft: "0", paddingBottom: "0" }}>
-                      <div className='d-flex flex-row'>
-                        <Col md={1} className='pl-0'>
-                          <img
-                            src={post.profile?.image}
-                            alt=''
-                            className={"rounded-circle"}
-                            style={{ height: "50px", width: "50px" }}
-                          />
-                        </Col>
-                        <Col md={11} className='ml-2'>
-                          <div>
-                            <a as={Link} href={`/profile/${post.profile?.id}`}>
-                              <span className='font-weight-bolder'>
-                                {post.profile?.name}
-                              </span>
-                            </a>
-
-                            {" · "}
-                            <span className='text-muted font-weight-light'>
-                              2nd
-                            </span>
-                          </div>
-                          <div
-                            className='text-muted'
-                            style={{ fontSize: "0.8rem" }}>
-                            <span>{dateDiff(post.createdAt, now)}</span>
-                            {post.profile?.title}
-                          </div>
-                        </Col>
-                      </div>
-                      <div>{post.text}</div>
-                      <div>
-                        {" "}
-                        {post?.image && (
-                          <img
-                            src={post.image}
-                            alt='post'
-                            className='img-fluid'
-                          />
-                        )}
-                      </div>
-                      <div style={{ fontSize: "0.8rem" }} className='mt-5'>
-                        <img src={comments} alt='comment' /> <a href='/'>35 </a>
-                        <Button variant='link' onClick={state.onHandleComment}>
-                          23 comments
-                        </Button>
-                      </div>
-                    </ListGroup.Item>
-                    <ListGroup.Item
-                      style={{ paddingLeft: "0", paddingTop: "0" }}
-                      className=''>
-                      <hr></hr>
-                      <div className='d-flex flex-row'>
-                        <Col md={2} className=' d-flex flex-row'>
-                          <ThumbsUpOutline
-                            color={"#808080"}
-                            title={"thumb"}
-                            height='25px'
-                            width='25px'
-                          />
-                          Like
-                        </Col>
-                        <Col md={2} className=''>
-                          <Button
-                            variant='link'
-                            onClick={state.onHandleComment}
-                            className='d-flex flex-row'>
-                            <ChatbubblesOutline
-                              color={"#808080"}
-                              title={"thumb"}
-                              height='25px'
-                              width='25px'
-                            />
-                            Comment
-                          </Button>
-                        </Col>
-                        <Col md={2} className='d-flex flex-row ml-5'>
-                          <ArrowRedoOutline
-                            color={"#808080"}
-                            title={"thumb"}
-                            height='25px'
-                            width='25px'
-                          />
-                          Share
-                        </Col>
-                        <Col md={2} className='d-flex flex-row ml-3'>
-                          <SendOutline
-                            color={"#808080"}
-                            title={"thumb"}
-                            height='25px'
-                            width='25px'
-                          />
-                          Send
-                        </Col>
-                      </div>
-                    </ListGroup.Item>
-                    {state.showComments && (
-                      <ListGroup.Item className='p-0 pt-3'>
-                        <Comments
-                          userImage={this.props.profile.image}
-                          postId={post.id}></Comments>
-                      </ListGroup.Item>
-                    )}
-                  </ListGroup>
-                </>
-              )}
-            />
+          this.props.posts.map((post) => (
+            <PostBox post={post} image={this.props.profile.image} />
           ))
         ) : (
           <MyLoader />
-          // <div className='d-flex justify-content-center mt-5'>
-          //   <Spinner animation='border' variant='primary' className='' />
-          // </div>
         )}
         <PostsModal
           currentPost={this.state.currentPost}

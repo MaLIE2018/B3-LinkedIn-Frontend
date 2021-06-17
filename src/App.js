@@ -135,7 +135,7 @@ class App extends React.Component {
       })
   }
 	render(){ 
-  localStorage.setItem('userId',1)
+  localStorage.setItem('userId',2)
 	return (
 		<>
 			<MyNavbar name={this.state.profile.name} 
