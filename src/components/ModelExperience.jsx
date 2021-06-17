@@ -62,7 +62,7 @@ function ModalExperience(props) {
     if (props.open) {
       fillData();
     }
-  }, [props]);
+  }, []);
 
   const fillData = () => {
     let startDate = "";

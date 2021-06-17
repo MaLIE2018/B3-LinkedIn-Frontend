@@ -2,9 +2,6 @@ import React from "react";
 import {
   Col,
   ListGroup,
-  Spinner,
-  Form,
-  FormControl,
   Button,
 } from "react-bootstrap";
 import {
@@ -139,7 +136,7 @@ class MyNewsFeed extends React.Component {
                             style={{ fontSize: "0.8rem" }}>
                             like this.
                           </span>
-                          {userId == post.profileId && (
+                          {userId === post.profileId && (
                             <EllipsisHorizontalOutline
                               color={"#808080"}
                               title={"thumb"}
@@ -163,7 +160,7 @@ class MyNewsFeed extends React.Component {
                             src={post.profile?.image}
                             alt=''
                             className={"rounded-circle"}
-                            style={{ height: "50px" }}
+                            style={{ height: "50px", width: "50px" }}
                           />
                         </Col>
                         <Col md={11} className='ml-2'>

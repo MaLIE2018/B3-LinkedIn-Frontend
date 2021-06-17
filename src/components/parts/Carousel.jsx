@@ -1,7 +1,7 @@
 import { Component } from "react";
 import Carousel from "react-elastic-carousel";
 import "../../css/ProfileTop.css";
-import Box from "./Box";
+
 
 export default class CarouselBadge extends Component {
   state = {
