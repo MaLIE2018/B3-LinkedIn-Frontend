@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   Form,
   FormControl,
-  Modal,
-  useAccordionToggle,
 } from "react-bootstrap";
 import Comment from "../components/Comment.jsx";
 
