@@ -23,7 +23,7 @@ class ListItem extends Component {
               src={this.props.item.image}
               alt='Experience'
               className={this.props.rounded && "rounded-circle"}
-              style={{ height: "50px", maxWidth: "100px" }}
+              style={{ height: "40px", maxWidth: "40px" }}
             />
           </Col>
           <Col md={10} className='ml-2'>

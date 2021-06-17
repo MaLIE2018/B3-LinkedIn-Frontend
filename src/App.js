@@ -10,6 +10,7 @@ import Ad from './components/Ad';
 import { expsUrl, getExperiences, getProfiles } from './helper/fetchData';
 
 import { Route, Switch, withRouter } from 'react-router-dom';
+import Login  from './components/Login.jsx';
 
 const api = process.env.REACT_APP_BE_URL
 
@@ -145,18 +146,14 @@ class App extends React.Component {
         {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
         developers in 48 hours. $0
           Recruiting fee. Start now."/>}
-        <Switch>
         <Route render={(routerProps) => <Profile
                       profile={this.state.currProfile}
                       onDidUpdate={this.handleUpdate}
                       currProfileId={this.state.currProfileId}
                       onCurrProfileChange={this.handleCurrProfileChange}
                     />} path={["/profile/:id"]}/>
-        </Switch>
-        <Route render={(routerProps) => <Feed
-                      profile={this.state.profile}
-
-                    />} exact path={["/feed","/"]}/>
+        <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
+        <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
         <Route render={(routerProps) => <Search
                       profiles = {this.state.filteredPeople.length !== 0?
                         this.state.filteredPeople
@@ -168,6 +165,9 @@ class App extends React.Component {
                         this.state.posts}
                       bearerToken={this.state.bearerToken}
                     />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+
+
+        
         
 	    <Footer/>
       </Container>

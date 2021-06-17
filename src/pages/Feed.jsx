@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
+import { CaretDownOutline } from "react-ionicons";
 import AddToYourFeed from "../components/AddToYourFeed";
+import Groups from "./../components/Groups";
+import LatestJobs from "./../components/LatestJobs";
 import MyNewsFeed from "./../components/MyNewsFeed";
 import Box from "./../components/parts/Box";
 import Posts from "./../components/Posts";
-
-import { CaretDownOutline } from "react-ionicons";
 import WelcomeBox from "./../components/WelcomeBox";
-import Groups from "./../components/Groups";
-import LatestJobs from "./../components/LatestJobs";
-import { checkImg } from "../helper/datediff";
+
+
 
 const api = process.env.REACT_APP_BE_URL;
 
@@ -38,7 +38,7 @@ class Feed extends Component {
         posts: posts.filter((post) => {
           if (post.user?.id) {
             return post.user.id === this.props.profile.id;
-          }
+          } else {return null}
         }),
       };
     });
