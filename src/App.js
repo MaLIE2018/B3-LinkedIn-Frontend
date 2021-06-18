@@ -65,7 +65,7 @@ class App extends React.Component {
 
   getProfile = async () => {
     try {
-      const res = await fetch(api +"api/profile/" + this.state.currProfileId);
+      const res = await fetch(api +"/api/profile/" + this.state.currProfileId);
       console.log("Test")
       if (res.ok) {
         this.setState({ currProfile: await res.json(), didUpdate: false });
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   getMyProfile = async () => {
     try {
-      const res = await fetch(api +"api/profile/" + userId);
+      const res = await fetch(api +"/api/profile/" + userId);
       console.log("Test")
       if (res.ok) {
         this.setState({ profile: await res.json(), didUpdate: false });

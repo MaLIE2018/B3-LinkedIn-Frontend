@@ -20,7 +20,7 @@ class EditProfile extends Component {
 
   getProfile = async () => {
     try {
-      const request = await fetch(api + "api/profile/" + userId, {
+      const request = await fetch(api + "/api/profile/" + userId, {
         method: "GET",
       });
       if (request.ok) {
@@ -58,7 +58,7 @@ class EditProfile extends Component {
     event.preventDefault();
 
     try {
-      const request = await fetch(api + "api/profile/" + userId, {
+      const request = await fetch(api + "/api/profile/" + userId, {
         method: "PUT",
         body: JSON.stringify(this.state.profile),
         headers: {
