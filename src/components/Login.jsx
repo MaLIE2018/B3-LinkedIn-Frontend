@@ -23,7 +23,7 @@ const Login = (props) => {
 
   const login = async () => {
     try {
-      const res = await fetch(`${ApiURL}api/profile/${username}/${password}`);
+      const res = await fetch(`${ApiURL}/api/profile/${username}/${password}`);
 
       if (res.ok) {
         const data = await res.json();
@@ -47,7 +47,7 @@ const Login = (props) => {
         username: signupUsername,
         password: signupPassword,
       };
-      const res = await fetch(`${ApiURL}api/profile`, {
+      const res = await fetch(`${ApiURL}/api/profile`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
