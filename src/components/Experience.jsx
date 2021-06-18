@@ -5,6 +5,7 @@ import ItemsList from "../components/parts/ItemsList";
 import ModalExperience from "./ModelExperience";
 
 const api = process.env.REACT_APP_BE_URL;
+
 let userId = localStorage.getItem("userId");
 
 class Experience extends Component {
@@ -75,6 +76,7 @@ class Experience extends Component {
   };
 
   render() {
+    userId = localStorage.getItem("userId");
     return this.state.experiences.length !== 0 ? (
       <Box
         add={true}

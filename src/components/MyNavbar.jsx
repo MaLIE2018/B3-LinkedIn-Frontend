@@ -19,8 +19,6 @@ import mainLogo from "../assets/img/Logo.png";
 import "../css/MyNavbar.css";
 import FilterBar from "./FilterBar";
 
-const userId = localStorage.getItem("userId");
-
 class MyNavbar extends React.Component {
   state = { filter: "" };
 
@@ -60,6 +58,7 @@ class MyNavbar extends React.Component {
   }
 
   render() {
+    const userId = localStorage.getItem("userId");
     return (
       <header className='fixed-top'>
         <Container sm='fluid'>
@@ -168,8 +167,11 @@ class MyNavbar extends React.Component {
                           Something
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href='#action/3.4'>
-                          Separated link
+                        <NavDropdown.Item
+                          as={Link}
+                          to='/login'
+                          onClick={() => localStorage.removeItem("userId")}>
+                          Log out
                         </NavDropdown.Item>
                       </NavDropdown>
                     </div>
@@ -195,8 +197,11 @@ class MyNavbar extends React.Component {
                           Something
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href='#action/3.4'>
-                          Separated link
+                        <NavDropdown.Item
+                          as={Link}
+                          to='/login'
+                          onClick={() => localStorage.removeItem("userId")}>
+                          Log out
                         </NavDropdown.Item>
                       </NavDropdown>
                     </div>

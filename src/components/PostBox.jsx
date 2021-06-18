@@ -16,7 +16,6 @@ import comments from "../assets/img/comments.PNG";
 import styled from "styled-components";
 import axios from "axios";
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
 
 const Styles = styled.div`
   .btn {
@@ -27,6 +26,7 @@ const Styles = styled.div`
 
 const PostBox = (props) => {
   const now = new Date();
+  let userId = localStorage.getItem("userId");
   const [likes, setLikes] = useState(0);
   const [noOfComments, setNoOfComments] = useState(0);
   const [update, setUpdate] = useState(false);
@@ -51,6 +51,10 @@ const PostBox = (props) => {
   useEffect(() => {
     getLikesComments();
   }, [update]);
+
+  useEffect(() => {
+    userId = localStorage.getItem("userId");
+  }, []);
 
   return (
     <Styles>
