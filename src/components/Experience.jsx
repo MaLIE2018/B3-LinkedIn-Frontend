@@ -5,6 +5,7 @@ import ItemsList from "../components/parts/ItemsList";
 import ModalExperience from "./ModelExperience";
 
 const api = process.env.REACT_APP_BE_URL;
+
 let userId = localStorage.getItem("userId");
 
 class Experience extends Component {
@@ -25,7 +26,7 @@ class Experience extends Component {
     const id = this.props.match.params?.id;
     if (id) userId = id;
     try {
-      const newUrl = api + "/experience/" + userId + "/user";
+      const newUrl = api + "/api/experience/" + userId + "/user";
       const response = await fetch(newUrl, {
         method: "GET",
         headers: {
@@ -55,7 +56,7 @@ class Experience extends Component {
   handleEditButtonClick = (e, item = {}) => {
     e.preventDefault();
     this.setState((state) => {
-      return { currentExperience: item, open: true };
+      return { currentExperience: item, open: !this.state.open };
     });
   };
 
@@ -75,6 +76,7 @@ class Experience extends Component {
   };
 
   render() {
+    userId = localStorage.getItem("userId");
     return this.state.experiences.length !== 0 ? (
       <Box
         add={true}
@@ -107,6 +109,14 @@ class Experience extends Component {
         render={(state) => (
           <>
             <div>Add an Experience</div>
+            <ModalExperience
+              profileId={this.props.profileId}
+              bearerToken={this.props.bearerToken}
+              onUpdate={this.handleUpdate}
+              item={this.state.currentExperience}
+              open={this.state.open}
+              onShowModal={this.handleShowModal}
+            />
           </>
         )}
       />

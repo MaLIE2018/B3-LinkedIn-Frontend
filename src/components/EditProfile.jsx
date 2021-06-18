@@ -1,6 +1,9 @@
 import { Modal, Form } from "react-bootstrap";
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 
+const api = process.env.REACT_APP_BE_URL;
+let userId = localStorage.getItem("userId");
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -17,19 +20,12 @@ class EditProfile extends Component {
 
   getProfile = async () => {
     try {
-      const request = await fetch(
-        "https://striveschool-api.herokuapp.com/api/profile/me",
-        {
-          method: "GET",
-          headers: {
-            Authorization:
-              // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDk4ZmE0MTYxOWU1ZDAwMTUxZjhmN2YiLCJpYXQiOjE2MjA2MzgyNzMsImV4cCI6MTYyMTg0Nzg3M30.D-RniP4L8eJ8XOdOjRXswq8LsRnPVK-QYiUr8h9fPhk",
-              "Bearer " + this.props.token,
-          },
-        }
-      );
+      const request = await fetch(api + "/api/profile/" + userId, {
+        method: "GET",
+      });
       if (request.ok) {
         const response = await request.json();
+
         this.setState({
           profile: {
             name: response.name,
@@ -38,7 +34,6 @@ class EditProfile extends Component {
             area: response.area,
           },
         });
-        console.log(this.state.profile);
       }
     } catch (error) {
       console.log(error);
@@ -63,24 +58,16 @@ class EditProfile extends Component {
     event.preventDefault();
 
     try {
-      const request = await fetch(
-        "https://striveschool-api.herokuapp.com/api/profile/",
-        {
-          method: "PUT",
-          body: JSON.stringify(this.state.profile),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + this.props.token,
-
-            // "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDk4ZmE0MTYxOWU1ZDAwMTUxZjhmN2YiLCJpYXQiOjE2MjA2MzgyNzMsImV4cCI6MTYyMTg0Nzg3M30.D-RniP4L8eJ8XOdOjRXswq8LsRnPVK-QYiUr8h9fPhk",
-          },
-        }
-      );
+      const request = await fetch(api + "/api/profile/" + userId, {
+        method: "PUT",
+        body: JSON.stringify(this.state.profile),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (request.ok) {
         const response = await request.json();
-        alert("Profile updated successfully");
         this.props.editProfileOff();
-        console.log(response);
       } else {
         console.log("I could not updated your profile");
       }
@@ -90,6 +77,7 @@ class EditProfile extends Component {
   };
 
   render() {
+    userId = localStorage.getItem("userId");
     return (
       <>
         <Modal
@@ -425,4 +413,4 @@ class EditProfile extends Component {
   }
 }
 
-export default EditProfile;
+export default withRouter(EditProfile);

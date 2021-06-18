@@ -8,7 +8,7 @@ const AddToYourFeed = () => {
   const [profiles, setProfiles] = useState([]);
   const getProfiles = async () => {
     try {
-      const requestProfile = await fetch(api + "/profile/", {
+      const requestProfile = await fetch(api + "/api/profile/", {
         method: "GET",
         headers: {},
       });

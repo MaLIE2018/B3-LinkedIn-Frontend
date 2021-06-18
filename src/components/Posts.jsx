@@ -26,7 +26,7 @@ class Posts extends Component {
     e.preventDefault();
     if (this.state.post.text.length >= 10) {
       try {
-        let response = await fetch(api + "/post/", {
+        let response = await fetch(api + "/api/post/", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -37,7 +37,7 @@ class Posts extends Component {
           if (this.state.formData !== undefined) {
             const data = await response.json();
             let newRes = await fetch(
-              api + "/post/" + data.id + "/uploadPostImage",
+              api + "/api/post/" + data.id + "/uploadPostImage",
               {
                 method: "POST",
                 body: this.state.formData,

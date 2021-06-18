@@ -10,13 +10,11 @@ import {
 import { Link } from "react-router-dom";
 import dateDiff from "../helper/datediff";
 import Comments from "./Comments";
-import MyLoader from "./ContentLoader";
 import Box from "./parts/Box";
 import comments from "../assets/img/comments.PNG";
 import styled from "styled-components";
 import axios from "axios";
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
 
 const Styles = styled.div`
   .btn {
@@ -27,6 +25,7 @@ const Styles = styled.div`
 
 const PostBox = (props) => {
   const now = new Date();
+  let userId = localStorage.getItem("userId");
   const [likes, setLikes] = useState(0);
   const [noOfComments, setNoOfComments] = useState(0);
   const [update, setUpdate] = useState(false);
@@ -35,10 +34,14 @@ const PostBox = (props) => {
   const getLikesComments = async () => {
     try {
       const noOfComments = await axios.get(
-        api + "/comments/" + props.post.id + "/post/count"
+        api + "/api/comments/" + props.post.id + "/post/count"
       );
-      const noOfLikes = await axios.get(api + "/like/post/" + props.post.id);
-      const names = await axios.get(api + `/like/post/${props.post.id}/users`);
+      const noOfLikes = await axios.get(
+        api + "/api/like/post/" + props.post.id
+      );
+      const names = await axios.get(
+        api + `/api/like/post/${props.post.id}/users`
+      );
       setLikers(names.data.users);
       setNoOfComments(noOfComments.data.count);
       setLikes(noOfLikes.data.likes);
@@ -51,6 +54,10 @@ const PostBox = (props) => {
   useEffect(() => {
     getLikesComments();
   }, [update]);
+
+  useEffect(() => {
+    userId = localStorage.getItem("userId");
+  }, []);
 
   return (
     <Styles>
@@ -102,7 +109,7 @@ const PostBox = (props) => {
                       src={props.post.profile?.image}
                       alt=''
                       className={"rounded-circle"}
-                      style={{ height: "50px" }}
+                      style={{ height: "50px", width: "50px" }}
                     />
                   </Col>
                   <Col md={11} className='ml-2'>
@@ -155,7 +162,7 @@ const PostBox = (props) => {
                       onClick={async () => {
                         try {
                           const res = await fetch(
-                            api + "/like/post/" + props.post.id,
+                            api + "/api/like/post/" + props.post.id,
                             {
                               method: "POST",
                               headers: {
@@ -171,7 +178,7 @@ const PostBox = (props) => {
                           } else {
                             try {
                               const res = await fetch(
-                                api + "/like/post/" + props.post.id
+                                api + "/api/like/post/" + props.post.id
                               );
                               if (res.ok) {
                                 const data = await res.json();

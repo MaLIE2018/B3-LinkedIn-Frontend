@@ -9,7 +9,7 @@ import Search from './pages/Search'
 import Ad from './components/Ad';
 import { expsUrl, getExperiences, getProfiles } from './helper/fetchData';
 
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Login  from './components/Login.jsx';
 
 const api = process.env.REACT_APP_BE_URL
@@ -65,8 +65,8 @@ class App extends React.Component {
 
   getProfile = async () => {
     try {
-      const res = await fetch(api +'/profile/' + this.state.currProfileId);
-      console.log("Test")
+      const res = await fetch(api +"/api/profile/" + this.state.currProfileId);
+  
       if (res.ok) {
         this.setState({ currProfile: await res.json(), didUpdate: false });
       }
@@ -77,8 +77,8 @@ class App extends React.Component {
 
   getMyProfile = async () => {
     try {
-      const res = await fetch(api +'/profile/' + userId);
-      console.log("Test")
+      const res = await fetch(api +"/api/profile/" + userId);
+   
       if (res.ok) {
         this.setState({ profile: await res.json(), didUpdate: false });
       }
@@ -102,7 +102,8 @@ class App extends React.Component {
   }
   componentDidUpdate(prevProps, prevState){
     if (this.state.didUpdate !== prevState.didUpdate){
-      this.getPosts()
+      this.getProfile()
+      this.getMyProfile()
     }
     if(prevState.currProfileId !== this.state.currProfileId){
       this.getProfile()
@@ -113,6 +114,7 @@ class App extends React.Component {
     }
     if(this.props.location.pathname !== prevProps.location.pathname){
       this.getProfile()
+      this.getMyProfile()
     }
   }
 
@@ -131,48 +133,59 @@ class App extends React.Component {
   handleCurrProfileChange = (currProfileId) => {
       this.setState((state) => {
         return { currProfileId: currProfileId,}
-          
       })
   }
 	render(){ 
-  
-	return (
-		<>
-			<MyNavbar name={this.state.profile.name} 
-      image={this.state.profile.image}
-      query={this.state.query}
-      onChangeQuery={this.handleChangeQuery}/>
-			<Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
-        {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
-        developers in 48 hours. $0
-          Recruiting fee. Start now."/>}
-        <Route render={(routerProps) => <Profile
-                      profile={this.state.currProfile}
-                      onDidUpdate={this.handleUpdate}
-                      currProfileId={this.state.currProfileId}
-                      onCurrProfileChange={this.handleCurrProfileChange}
-                    />} path={["/profile/:id"]}/>
-        <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
-        <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
-        <Route render={(routerProps) => <Search
-                      profiles = {this.state.filteredPeople.length !== 0?
-                        this.state.filteredPeople
-                        :
-                        this.state.profiles}
-                      posts={this.state.filteredPosts.length !== 0?
-                        this.state.filteredPosts
-                        :
-                        this.state.posts}
-                      bearerToken={this.state.bearerToken}
-                    />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
 
 
-        
-        
-	    <Footer/>
-      </Container>
-	</>
-	);
+    return (
+      <>
+        <MyNavbar name={this.state.profile.name} 
+        image={this.state.profile.image}
+        query={this.state.query}
+        userId={localStorage.getItem('userId')}	
+        onChangeQuery={this.handleChangeQuery}/>
+        <Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
+          {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
+          developers in 48 hours. $0
+            Recruiting fee. Start now."/>}
+          <Route render={(routerProps) => <Profile
+                        profile={this.state.currProfile}
+                        onDidUpdate={this.handleUpdate}
+                        currProfileId={this.state.currProfileId}
+                        onCurrProfileChange={this.handleCurrProfileChange}
+                      />} path={["/profile/:id"]}/>
+          <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
+          <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
+          <Route render={(routerProps) => <Search
+                        profiles = {this.state.filteredPeople.length !== 0?
+                          this.state.filteredPeople
+                          :
+                          this.state.profiles}
+                          posts={this.state.filteredPosts.length !== 0?
+                            this.state.filteredPosts
+                            :
+                            this.state.posts}
+                            bearerToken={this.state.bearerToken}
+                            />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+        <Footer/>
+        </Container>
+    </>
+    );
+  }else{
+    
+    return (
+     <Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
+   <MyNavbar name={this.state.profile.name} 
+        image={this.state.profile.image}
+        query={this.state.query}
+        userId={localStorage.getItem('userId')}	
+        onChangeQuery={this.handleChangeQuery}/>
+         <Route render={(routerProps) => <Login rout erProps={routerProps} />} exact path={"/login"}/>
+         <Footer/>
+         <Redirect to="/login" />
+        </Container>)
+  }
 }
 }
 

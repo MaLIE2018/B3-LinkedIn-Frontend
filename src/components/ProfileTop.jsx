@@ -11,7 +11,7 @@ import EditProfile from "./EditProfile";
 import EditButton from "./parts/EditButton";
 
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
+let userId = localStorage.getItem("userId");
 export default class ProfileTop extends Component {
   state = {
     showModal: false,
@@ -42,10 +42,13 @@ export default class ProfileTop extends Component {
 
   uploadImage = async () => {
     try {
-      let newRes = await fetch(api + `/profile/${userId}/uploadProfileImage`, {
-        method: "POST",
-        body: this.state.formData,
-      });
+      let newRes = await fetch(
+        api + `/api/profile/${userId}/uploadProfileImage`,
+        {
+          method: "POST",
+          body: this.state.formData,
+        }
+      );
       if (newRes.ok) {
         console.log("FileUploaded");
         this.props.onDidUpdate();
@@ -56,6 +59,7 @@ export default class ProfileTop extends Component {
   };
 
   render() {
+    userId = localStorage.getItem("userId");
     return (
       <>
         <Box
@@ -121,14 +125,16 @@ export default class ProfileTop extends Component {
             </Row>
           )}
         />
-        <UpdateImgProfileModal
-          image={this.props.profile.image}
-          open={this.state.showModal}
-          onHandleShowModal={this.handleShowModal}
-          onHandleFileUpload={this.handleFileUpload}
-          uploadImageUrl={this.state.uploadImageUrl}
-          onUploadClick={this.uploadImage}
-        />
+        {this.props.profile.id == localStorage.getItem("userId") && (
+          <UpdateImgProfileModal
+            image={this.props.profile.image}
+            open={this.state.showModal}
+            onHandleShowModal={this.handleShowModal}
+            onHandleFileUpload={this.handleFileUpload}
+            uploadImageUrl={this.state.uploadImageUrl}
+            onUploadClick={this.uploadImage}
+          />
+        )}
       </>
     );
   }

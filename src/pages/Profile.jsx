@@ -10,19 +10,21 @@ import { withRouter } from "react-router-dom";
 
 class Profile extends Component {
   state = {
-    currProfileId: this.props.match.params?.id,
+    currProfileId: null,
   };
 
   componentDidMount() {
     document.title = `Linkedin - Profile ${this.props.profile.name} `;
   }
 
-  componentDidUpdate = () => {
-    if (this.state.currProfileId) {
-      if (this.props.currProfileId !== this.state.currProfileId) {
-        this.props.onCurrProfileChange(this.state.currProfileId);
-      }
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.match.params.id !== this.state.currProfileId) {
+      this.setState((state) => {
+        return { currProfileId: this.props.match.params.id };
+      });
+      this.props.onCurrProfileChange(this.props.match.params.id);
     }
+    document.title = `Linkedin - Profile ${this.props.profile.name} `;
   };
 
   render() {

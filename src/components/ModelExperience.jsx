@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "../css/ProfileTop.css";
 
 const userId = localStorage.getItem("userId");
-const url = process.env.REACT_APP_BE_URL + `/experience`;
+const url = process.env.REACT_APP_BE_URL + "/api/experience";
 function ModalExperience(props) {
   const [data, setData] = useState({
     experience: {
@@ -59,10 +59,11 @@ function ModalExperience(props) {
   }, [data.dates]);
 
   useEffect(() => {
+    console.log("props.open:", props.open);
     if (props.open) {
       fillData();
     }
-  }, []);
+  }, [props.open]);
 
   const fillData = () => {
     let startDate = "";
@@ -237,7 +238,25 @@ function ModalExperience(props) {
         size='lg'
         id='modalExperience'
         show={props.open}
-        onHide={props.onShowModal}
+        onHide={() => {
+          setData({
+            experience: {
+              role: "",
+              company: "",
+              startDate: "",
+              endDate: "",
+              description: "",
+              area: "",
+            },
+            dates: {
+              sMonth: null,
+              sYear: null,
+              eMonth: null,
+              eYear: null,
+            },
+          });
+          return props.onShowModal();
+        }}
         aria-labelledby='example-modal-sizes-title-lg'
         scrollable={true}>
         <Modal.Header closeButton>
