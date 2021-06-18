@@ -25,7 +25,7 @@ class EditProfile extends Component {
       });
       if (request.ok) {
         const response = await request.json();
-        console.log("response:", response);
+
         this.setState({
           profile: {
             name: response.name,

@@ -66,7 +66,7 @@ class App extends React.Component {
   getProfile = async () => {
     try {
       const res = await fetch(api +"/api/profile/" + this.state.currProfileId);
-      console.log("Test")
+  
       if (res.ok) {
         this.setState({ currProfile: await res.json(), didUpdate: false });
       }
@@ -78,7 +78,7 @@ class App extends React.Component {
   getMyProfile = async () => {
     try {
       const res = await fetch(api +"/api/profile/" + userId);
-      console.log("Test")
+   
       if (res.ok) {
         this.setState({ profile: await res.json(), didUpdate: false });
       }
@@ -131,8 +131,6 @@ class App extends React.Component {
       })
   }
   handleCurrProfileChange = (currProfileId) => {
-    console.log('currProfileId:', currProfileId)
-    console.log("handled")
       this.setState((state) => {
         return { currProfileId: currProfileId,}
       })

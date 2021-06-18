@@ -50,7 +50,6 @@ const Comment = (props) => {
   };
 
   const fetchCommentLikes = async () => {
-    console.log("like");
     try {
       const res = await fetch(`${ApiURL}/api/like/comment/${props.comment.id}`);
       const likes = await res.json();
