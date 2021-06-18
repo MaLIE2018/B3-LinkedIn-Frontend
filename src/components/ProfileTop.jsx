@@ -43,7 +43,7 @@ export default class ProfileTop extends Component {
   uploadImage = async () => {
     try {
       let newRes = await fetch(
-        api + `api/profile/${userId}/uploadProfileImage`,
+        api + `/api/profile/${userId}/uploadProfileImage`,
         {
           method: "POST",
           body: this.state.formData,

@@ -16,7 +16,7 @@ const Comment = (props) => {
 
   const updateComment = async (e) => {
     try {
-      const res = await fetch(`${ApiURL}/comments/${props.comment.id}`, {
+      const res = await fetch(`${ApiURL}/api/comments/${props.comment.id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -38,7 +38,7 @@ const Comment = (props) => {
 
   const deleteComment = async (e) => {
     try {
-      const res = await fetch(`${ApiURL}/comments/${props.comment.id}`, {
+      const res = await fetch(`${ApiURL}/api/comments/${props.comment.id}`, {
         method: "DELETE",
       });
 
@@ -52,7 +52,7 @@ const Comment = (props) => {
   const fetchCommentLikes = async () => {
     console.log("like");
     try {
-      const res = await fetch(`${ApiURL}/like/comment/${props.comment.id}`);
+      const res = await fetch(`${ApiURL}/api/like/comment/${props.comment.id}`);
       const likes = await res.json();
       setCommentLikes(likes.likes);
       setUpdate(false);
@@ -63,15 +63,18 @@ const Comment = (props) => {
 
   const likeComment = async () => {
     try {
-      const res = await fetch(`${ApiURL}/like/comment/${props.comment.id}`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          profileId: userId,
-        }),
-      });
+      const res = await fetch(
+        `${ApiURL}/api/like/comment/${props.comment.id}`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            profileId: userId,
+          }),
+        }
+      );
       setUpdate(true);
     } catch (error) {
       console.log(error);

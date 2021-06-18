@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  FormControl,
-} from "react-bootstrap";
+import { Form, FormControl } from "react-bootstrap";
 import Comment from "../components/Comment.jsx";
 
 const ApiURL = process.env.REACT_APP_BE_URL;
@@ -15,7 +12,7 @@ const Comments = (props) => {
 
   const fetchComments = async () => {
     try {
-      const res = await fetch(`${ApiURL}/comments/${props.postId}/post`);
+      const res = await fetch(`${ApiURL}/api/comments/${props.postId}/post`);
       const data = await res.json();
 
       setComments(
@@ -32,7 +29,7 @@ const Comments = (props) => {
   const postComment = async (e) => {
     try {
       if (addCommentText.length > 0) {
-        const res = await fetch(`${ApiURL}/comments/`, {
+        const res = await fetch(`${ApiURL}/api/comments/`, {
           method: "POST",
           headers: {
             "content-type": "application/json",

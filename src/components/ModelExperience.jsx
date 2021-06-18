@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "../css/ProfileTop.css";
 
 const userId = localStorage.getItem("userId");
-const url = process.env.REACT_APP_BE_URL + `/experience`;
+const url = process.env.REACT_APP_BE_URL + "/api/experience";
 function ModalExperience(props) {
   const [data, setData] = useState({
     experience: {
