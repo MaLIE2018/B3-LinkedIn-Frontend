@@ -9,7 +9,7 @@ import Search from './pages/Search'
 import Ad from './components/Ad';
 import { expsUrl, getExperiences, getProfiles } from './helper/fetchData';
 
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Login  from './components/Login.jsx';
 
 const api = process.env.REACT_APP_BE_URL
@@ -139,44 +139,49 @@ class App extends React.Component {
   }
 	render(){ 
   // localStorage.setItem('userId',2)
-	return (
-		<>
-			<MyNavbar name={this.state.profile.name} 
-      image={this.state.profile.image}
-      query={this.state.query}
-      userId={localStorage.getItem('userId')}	
-      onChangeQuery={this.handleChangeQuery}/>
-			<Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
-        {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
-        developers in 48 hours. $0
-          Recruiting fee. Start now."/>}
-        <Route render={(routerProps) => <Profile
-                      profile={this.state.currProfile}
-                      onDidUpdate={this.handleUpdate}
-                      currProfileId={this.state.currProfileId}
-                      onCurrProfileChange={this.handleCurrProfileChange}
-                    />} path={["api/profile/:id"]}/>
-        <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
-        <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
-        <Route render={(routerProps) => <Search
-                      profiles = {this.state.filteredPeople.length !== 0?
-                        this.state.filteredPeople
-                        :
-                        this.state.profiles}
-                      posts={this.state.filteredPosts.length !== 0?
-                        this.state.filteredPosts
-                        :
-                        this.state.posts}
-                      bearerToken={this.state.bearerToken}
-                    />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+  if(localStorage.getItem('userId')){
 
-
-        
-        
-	    <Footer/>
-      </Container>
-	</>
-	);
+    return (
+      <>
+        <MyNavbar name={this.state.profile.name} 
+        image={this.state.profile.image}
+        query={this.state.query}
+        userId={localStorage.getItem('userId')}	
+        onChangeQuery={this.handleChangeQuery}/>
+        <Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
+          {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
+          developers in 48 hours. $0
+            Recruiting fee. Start now."/>}
+          <Route render={(routerProps) => <Profile
+                        profile={this.state.currProfile}
+                        onDidUpdate={this.handleUpdate}
+                        currProfileId={this.state.currProfileId}
+                        onCurrProfileChange={this.handleCurrProfileChange}
+                      />} path={["api/profile/:id"]}/>
+          <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
+          <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
+          <Route render={(routerProps) => <Search
+                        profiles = {this.state.filteredPeople.length !== 0?
+                          this.state.filteredPeople
+                          :
+                          this.state.profiles}
+                        posts={this.state.filteredPosts.length !== 0?
+                          this.state.filteredPosts
+                          :
+                          this.state.posts}
+                        bearerToken={this.state.bearerToken}
+                      />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+  
+  
+          
+          
+        <Footer/>
+        </Container>
+    </>
+    );
+  }else{
+    return <Redirect to="/login" />
+  }
 }
 }
 
