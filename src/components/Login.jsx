@@ -24,7 +24,8 @@ const Login = (props) => {
 
     const login = async () => {
         try {
-            const res = await fetch(`${ApiURL}/profile/${username}/${password}`)
+
+            if(username.length > 1 && password.length > 1) const res = await fetch(`${ApiURL}/profile/${username}/${password}`)
 
             if (res.ok) {
                 const data = await res.json()
