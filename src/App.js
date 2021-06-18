@@ -65,7 +65,7 @@ class App extends React.Component {
 
   getProfile = async () => {
     try {
-      const res = await fetch(api +'api/profile/' + this.state.currProfileId);
+      const res = await fetch(api +'/api/profile/' + this.state.currProfileId);
       console.log("Test")
       if (res.ok) {
         this.setState({ currProfile: await res.json(), didUpdate: false });
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   getMyProfile = async () => {
     try {
-      const res = await fetch(api +'api/profile/' + userId);
+      const res = await fetch(api +'/api/profile/' + userId);
       console.log("Test")
       if (res.ok) {
         this.setState({ profile: await res.json(), didUpdate: false });
@@ -157,7 +157,7 @@ class App extends React.Component {
                         onDidUpdate={this.handleUpdate}
                         currProfileId={this.state.currProfileId}
                         onCurrProfileChange={this.handleCurrProfileChange}
-                      />} path={["/api/profile/:id"]}/>
+                      />} path={["/profile/:id"]}/>
           <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
           <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
           <Route render={(routerProps) => <Search
@@ -165,18 +165,29 @@ class App extends React.Component {
                           this.state.filteredPeople
                           :
                           this.state.profiles}
-                        posts={this.state.filteredPosts.length !== 0?
-                          this.state.filteredPosts
-                          :
-                          this.state.posts}
-                        bearerToken={this.state.bearerToken}
-                      />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
+                          posts={this.state.filteredPosts.length !== 0?
+                            this.state.filteredPosts
+                            :
+                            this.state.posts}
+                            bearerToken={this.state.bearerToken}
+                            />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
         <Footer/>
         </Container>
     </>
     );
   }else{
-    return <Redirect to="/login" />
+    
+    return (
+     <Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
+   <MyNavbar name={this.state.profile.name} 
+        image={this.state.profile.image}
+        query={this.state.query}
+        userId={localStorage.getItem('userId')}	
+        onChangeQuery={this.handleChangeQuery}/>
+         <Route render={(routerProps) => <Login rout erProps={routerProps} />} exact path={"/login"}/>
+         <Footer/>
+         <Redirect to="/login" />
+        </Container>)
   }
 }
 }
