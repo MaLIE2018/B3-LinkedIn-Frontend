@@ -46,7 +46,7 @@ class Feed extends Component {
 
   getPosts = async () => {
     try {
-      const requestPosts = await fetch(api + "/api/post/", {
+      const requestPosts = await fetch(api + "api/post/", {
         method: "GET",
       });
       if (requestPosts.ok) {
