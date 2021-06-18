@@ -18,7 +18,11 @@ const Comments = (props) => {
       const res = await fetch(`${ApiURL}/comments/${props.postId}/post`);
       const data = await res.json();
 
-      setComments(data);
+      setComments(
+        data.sort((a, b) => {
+          return a.createdAt > b.createdAt ? -1 : 1;
+        })
+      );
       setUpdate(false);
     } catch (error) {
       console.log(error);
@@ -42,6 +46,7 @@ const Comments = (props) => {
         const data = await res.json();
 
         setUpdate(true);
+        props.setUpdate(true);
         setAddCommentText("");
       }
     } catch (error) {
@@ -82,7 +87,12 @@ const Comments = (props) => {
       <>
         {comments.length > 0 &&
           comments.map((comment) => (
-            <Comment setUpdate={setUpdate} key={comment.id} comment={comment} />
+            <Comment
+              setUpdate={setUpdate}
+              topSetUpdate={props.setUpdate}
+              key={comment.id}
+              comment={comment}
+            />
           ))}
       </>
     </div>

@@ -29,6 +29,7 @@ const Comment = (props) => {
       });
 
       props.setUpdate(true);
+      props.topSetUpdate(true);
       handleClose();
     } catch (error) {
       console.log(error);
@@ -42,6 +43,7 @@ const Comment = (props) => {
       });
 
       props.setUpdate(true);
+      props.topSetUpdate(true);
     } catch (error) {
       console.log(error);
     }
@@ -115,14 +117,18 @@ const Comment = (props) => {
           <div className='d-flex justify-content-between'>
             <span className='comment'>{props.comment.comment}</span>
             <div>
-              <button
-                className='btn-danger mr-2'
-                onClick={(e) => deleteComment(e)}>
-                Delete
-              </button>
-              <button className='btn-info' onClick={() => handleShow()}>
-                Edit
-              </button>
+              {userId == props.comment.profileId && (
+                <>
+                  <button
+                    className='btn-danger mr-2'
+                    onClick={(e) => deleteComment(e)}>
+                    Delete
+                  </button>
+                  <button className='btn-info' onClick={() => handleShow()}>
+                    Edit
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@ import { Component } from "react";
 import Carousel from "react-elastic-carousel";
 import "../../css/ProfileTop.css";
 
-
 export default class CarouselBadge extends Component {
   state = {
     items: [
@@ -30,8 +29,7 @@ export default class CarouselBadge extends Component {
 
             <span>
               <div className='alert alert-info' role='alert'>
-                A simple info it out! A simple info alert—check it
-                out!
+                A simple info it out! A simple info alert—check it out!
               </div>
             </span>
           </div>
