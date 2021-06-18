@@ -65,7 +65,7 @@ class App extends React.Component {
 
   getProfile = async () => {
     try {
-      const res = await fetch(api +'/profile/' + this.state.currProfileId);
+      const res = await fetch(api +'api/profile/' + this.state.currProfileId);
       console.log("Test")
       if (res.ok) {
         this.setState({ currProfile: await res.json(), didUpdate: false });
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   getMyProfile = async () => {
     try {
-      const res = await fetch(api +'/profile/' + userId);
+      const res = await fetch(api +'api/profile/' + userId);
       console.log("Test")
       if (res.ok) {
         this.setState({ profile: await res.json(), didUpdate: false });
@@ -155,7 +155,7 @@ class App extends React.Component {
                       onDidUpdate={this.handleUpdate}
                       currProfileId={this.state.currProfileId}
                       onCurrProfileChange={this.handleCurrProfileChange}
-                    />} path={["/profile/:id"]}/>
+                    />} path={["api/profile/:id"]}/>
         <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
         <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
         <Route render={(routerProps) => <Search

@@ -9,8 +9,6 @@ import Box from "./../components/parts/Box";
 import Posts from "./../components/Posts";
 import WelcomeBox from "./../components/WelcomeBox";
 
-
-
 const api = process.env.REACT_APP_BE_URL;
 
 class Feed extends Component {
@@ -38,7 +36,9 @@ class Feed extends Component {
         posts: posts.filter((post) => {
           if (post.user?.id) {
             return post.user.id === this.props.profile.id;
-          } else {return null}
+          } else {
+            return null;
+          }
         }),
       };
     });
@@ -46,7 +46,7 @@ class Feed extends Component {
 
   getPosts = async () => {
     try {
-      const requestPosts = await fetch(api + "/post/", {
+      const requestPosts = await fetch(api + "api/post/", {
         method: "GET",
       });
       if (requestPosts.ok) {
