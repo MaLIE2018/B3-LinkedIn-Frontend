@@ -136,8 +136,7 @@ class App extends React.Component {
       })
   }
 	render(){ 
-  // localStorage.setItem('userId',2)
-  if(localStorage.getItem('userId')){
+
 
     return (
       <>
