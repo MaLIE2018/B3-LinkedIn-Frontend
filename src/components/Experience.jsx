@@ -56,7 +56,7 @@ class Experience extends Component {
   handleEditButtonClick = (e, item = {}) => {
     e.preventDefault();
     this.setState((state) => {
-      return { currentExperience: item, open: true };
+      return { currentExperience: item, open: !this.state.open };
     });
   };
 
