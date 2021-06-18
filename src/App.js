@@ -136,8 +136,7 @@ class App extends React.Component {
       })
   }
 	render(){ 
-
-
+    if(localStorage.getItem('userId')){
     return (
       <>
         <MyNavbar name={this.state.profile.name} 
@@ -173,7 +172,6 @@ class App extends React.Component {
     </>
     );
   }else{
-    
     return (
      <Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
    <MyNavbar name={this.state.profile.name} 
@@ -186,7 +184,7 @@ class App extends React.Component {
          <Redirect to="/login" />
         </Container>)
   }
-}
+  } 
 }
 
 export default withRouter(App);

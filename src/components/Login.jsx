@@ -6,80 +6,64 @@ const ApiURL = process.env.REACT_APP_BE_URL;
 const userId = localStorage.getItem("userId");
 
 const Login = (props) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [area, setArea] = useState("");
+  const [email, setEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupUsername, setSignupUsername] = useState("");
+  const [profile, setProfile] = useState("");
 
+  const [show, setShow] = useState(false);
 
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [name, setName] = useState("")
-    const [surname, setSurname] = useState("")
-    const [area, setArea] = useState("")
-    const [email, setEmail] = useState("")
-    const [signupPassword, setSignupPassword] = useState("")
-    const [signupUsername, setSignupUsername] = useState("")
-    const [profile, setProfile] = useState("")
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
+  const login = async () => {
+    try {
+      const res = await fetch(`${ApiURL}/profile/${username}/${password}`);
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    const login = async () => {
-        try {
-
-            if(username.length > 1 && password.length > 1) const res = await fetch(`${ApiURL}/profile/${username}/${password}`)
-
-            if (res.ok) {
-                const data = await res.json()
-                setProfile(data)
-                localStorage.setItem('userId', data.id)
-
-            } else {
-                alert("Wrong credentials, try again!")
-
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
+      if (res.ok) {
+        const data = await res.json();
+        setProfile(data);
+        localStorage.setItem("userId", data.id);
+      } else {
+        alert("Wrong credentials, try again!");
+      }
+    } catch (error) {
+      console.log(error);
     }
-    const signup = async () => {
+  };
+  const signup = async () => {
+    try {
+      const newUser = {
+        name: name,
+        surname: surname,
+        area: area,
+        email: email,
+        username: signupUsername,
+        password: signupPassword,
+      };
+      const res = await fetch(`${ApiURL}/profile`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
 
-        try {
+      if (res.ok) {
+        const data = await res.json();
 
-            const newUser = {
-                name: name,
-                surname: surname,
-                area: area,
-                email: email,
-                username: signupUsername,
-                password: signupPassword,
-
-            }
-            const res = await fetch(`${ApiURL}/profile`, {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify(
-                    newUser
-                )
-            })
-
-            if (res.ok) {
-                const data = await res.json()
-
-                console.log(data)
-
-
-            } else {
-                alert("Wrong credentials, try again!")
-
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
+        console.log(data);
+      } else {
+        alert("Wrong credentials, try again!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
