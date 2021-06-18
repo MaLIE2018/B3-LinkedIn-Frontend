@@ -109,6 +109,14 @@ class Experience extends Component {
         render={(state) => (
           <>
             <div>Add an Experience</div>
+            <ModalExperience
+              profileId={this.props.profileId}
+              bearerToken={this.props.bearerToken}
+              onUpdate={this.handleUpdate}
+              item={this.state.currentExperience}
+              open={this.state.open}
+              onShowModal={this.handleShowModal}
+            />
           </>
         )}
       />
