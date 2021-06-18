@@ -35,10 +35,12 @@ const PostBox = (props) => {
   const getLikesComments = async () => {
     try {
       const noOfComments = await axios.get(
-        api + "/comments/" + props.post.id + "/post/count"
+        api + "api/comments/" + props.post.id + "/post/count"
       );
-      const noOfLikes = await axios.get(api + "/like/post/" + props.post.id);
-      const names = await axios.get(api + `/like/post/${props.post.id}/users`);
+      const noOfLikes = await axios.get(api + "api/like/post/" + props.post.id);
+      const names = await axios.get(
+        api + `api/like/post/${props.post.id}/users`
+      );
       setLikers(names.data.users);
       setNoOfComments(noOfComments.data.count);
       setLikes(noOfLikes.data.likes);
@@ -159,7 +161,7 @@ const PostBox = (props) => {
                       onClick={async () => {
                         try {
                           const res = await fetch(
-                            api + "/like/post/" + props.post.id,
+                            api + "api/like/post/" + props.post.id,
                             {
                               method: "POST",
                               headers: {
@@ -175,7 +177,7 @@ const PostBox = (props) => {
                           } else {
                             try {
                               const res = await fetch(
-                                api + "/like/post/" + props.post.id
+                                api + "api/like/post/" + props.post.id
                               );
                               if (res.ok) {
                                 const data = await res.json();
