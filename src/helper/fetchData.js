@@ -23,7 +23,7 @@ export const getProfiles = async(bearerToken) =>{
       return data
     }
   } catch (error) {
-    console.log(error);
+    console.log(error, getProfiles);
   }
 }
 

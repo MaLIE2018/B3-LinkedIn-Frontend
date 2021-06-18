@@ -59,11 +59,10 @@ function ModalExperience(props) {
   }, [data.dates]);
 
   useEffect(() => {
-    console.log("props.open:", props.open);
     if (props.open) {
       fillData();
     }
-  }, [props.open]);
+  }, []);
 
   const fillData = () => {
     let startDate = "";
@@ -237,25 +236,7 @@ function ModalExperience(props) {
         size='lg'
         id='modalExperience'
         show={props.open}
-        onHide={() => {
-          setData({
-            experience: {
-              role: "",
-              company: "",
-              startDate: "",
-              endDate: "",
-              description: "",
-              area: "",
-            },
-            dates: {
-              sMonth: null,
-              sYear: null,
-              eMonth: null,
-              eYear: null,
-            },
-          });
-          return props.onShowModal();
-        }}
+        onHide={props.onShowModal}
         aria-labelledby='example-modal-sizes-title-lg'
         scrollable={true}>
         <Modal.Header closeButton>

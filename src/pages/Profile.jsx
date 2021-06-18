@@ -23,6 +23,7 @@ class Profile extends Component {
         return { currProfileId: this.props.match.params.id };
       });
       this.props.onCurrProfileChange(this.props.match.params.id);
+      console.log("this.props.profile.name:", this.props.profile.name);
     }
     document.title = `Linkedin - Profile ${this.props.profile.name} `;
   };
