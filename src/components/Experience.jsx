@@ -26,7 +26,7 @@ class Experience extends Component {
     const id = this.props.match.params?.id;
     if (id) userId = id;
     try {
-      const newUrl = api + "api/experience/" + userId + "/user";
+      const newUrl = api + "/api/experience/" + userId + "/user";
       const response = await fetch(newUrl, {
         method: "GET",
         headers: {

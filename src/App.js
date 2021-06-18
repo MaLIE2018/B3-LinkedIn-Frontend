@@ -157,7 +157,7 @@ class App extends React.Component {
                         onDidUpdate={this.handleUpdate}
                         currProfileId={this.state.currProfileId}
                         onCurrProfileChange={this.handleCurrProfileChange}
-                      />} path={["api/profile/:id"]}/>
+                      />} path={["/api/profile/:id"]}/>
           <Route render={(routerProps) => <Login routerProps={routerProps} />} exact path={"/login"}/>
           <Route render={(routerProps) => <Feed profile={this.state.profile}/>} exact path={["/feed", "/"]}/>
           <Route render={(routerProps) => <Search
@@ -171,10 +171,6 @@ class App extends React.Component {
                           this.state.posts}
                         bearerToken={this.state.bearerToken}
                       />} exact path={["/Search/q=:query","/search/q=:query/:filter"]}/>
-  
-  
-          
-          
         <Footer/>
         </Container>
     </>
