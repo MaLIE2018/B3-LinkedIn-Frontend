@@ -11,7 +11,7 @@ import EditProfile from "./EditProfile";
 import EditButton from "./parts/EditButton";
 
 const api = process.env.REACT_APP_BE_URL;
-const userId = localStorage.getItem("userId");
+let userId = localStorage.getItem("userId");
 export default class ProfileTop extends Component {
   state = {
     showModal: false,
@@ -56,6 +56,7 @@ export default class ProfileTop extends Component {
   };
 
   render() {
+    userId = localStorage.getItem("userId");
     return (
       <>
         <Box

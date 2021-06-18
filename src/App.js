@@ -102,7 +102,8 @@ class App extends React.Component {
   }
   componentDidUpdate(prevProps, prevState){
     if (this.state.didUpdate !== prevState.didUpdate){
-      this.getPosts()
+      this.getProfile()
+      this.getMyProfile()
     }
     if(prevState.currProfileId !== this.state.currProfileId){
       this.getProfile()
@@ -113,6 +114,7 @@ class App extends React.Component {
     }
     if(this.props.location.pathname !== prevProps.location.pathname){
       this.getProfile()
+      this.getMyProfile()
     }
   }
 
@@ -129,18 +131,20 @@ class App extends React.Component {
       })
   }
   handleCurrProfileChange = (currProfileId) => {
+    console.log('currProfileId:', currProfileId)
+    console.log("handled")
       this.setState((state) => {
         return { currProfileId: currProfileId,}
-          
       })
   }
 	render(){ 
-  localStorage.setItem('userId',2)
+  // localStorage.setItem('userId',2)
 	return (
 		<>
 			<MyNavbar name={this.state.profile.name} 
       image={this.state.profile.image}
       query={this.state.query}
+      userId={localStorage.getItem('userId')}	
       onChangeQuery={this.handleChangeQuery}/>
 			<Container sm="fluid" style={{marginTop: "8vh"}} className="pt-2" >
         {(this.state.query.length === 0 )&& <Ad title="Need Developers ASAP? Hire the top 3% of 
