@@ -53,21 +53,21 @@ const Login = (props) => {
                 password: signupPassword,
 
             }
-            const res = await fetch(`${ApiURL}/profile/${username}/${password}`,{
+            const res = await fetch(`${ApiURL}/profile`, {
                 method: "POST",
                 headers: {
-                  "content-type": "application/json",
+                    "content-type": "application/json",
                 },
-                body: JSON.stringify({
-                 newUser
-                })
+                body: JSON.stringify(
+                    newUser
+                )
             })
 
             if (res.ok) {
                 const data = await res.json()
-                
+
                 console.log(data)
-                console.log()
+
 
             } else {
                 alert("Wrong credentials, try again!")
