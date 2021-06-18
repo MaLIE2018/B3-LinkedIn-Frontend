@@ -109,7 +109,7 @@ const PostBox = (props) => {
                       src={props.post.profile?.image}
                       alt=''
                       className={"rounded-circle"}
-                      style={{ height: "50px" }}
+                      style={{ height: "50px", width: "50px" }}
                     />
                   </Col>
                   <Col md={11} className='ml-2'>

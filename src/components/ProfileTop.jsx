@@ -125,14 +125,16 @@ export default class ProfileTop extends Component {
             </Row>
           )}
         />
-        <UpdateImgProfileModal
-          image={this.props.profile.image}
-          open={this.state.showModal}
-          onHandleShowModal={this.handleShowModal}
-          onHandleFileUpload={this.handleFileUpload}
-          uploadImageUrl={this.state.uploadImageUrl}
-          onUploadClick={this.uploadImage}
-        />
+        {this.props.profile.id == localStorage.getItem("userId") && (
+          <UpdateImgProfileModal
+            image={this.props.profile.image}
+            open={this.state.showModal}
+            onHandleShowModal={this.handleShowModal}
+            onHandleFileUpload={this.handleFileUpload}
+            uploadImageUrl={this.state.uploadImageUrl}
+            onUploadClick={this.uploadImage}
+          />
+        )}
       </>
     );
   }
