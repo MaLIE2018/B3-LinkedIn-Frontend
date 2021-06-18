@@ -10,7 +10,6 @@ import {
 import { Link } from "react-router-dom";
 import dateDiff from "../helper/datediff";
 import Comments from "./Comments";
-import MyLoader from "./ContentLoader";
 import Box from "./parts/Box";
 import comments from "../assets/img/comments.PNG";
 import styled from "styled-components";
@@ -41,7 +40,7 @@ const PostBox = (props) => {
         api + "/api/like/post/" + props.post.id
       );
       const names = await axios.get(
-        api + `api/like/post/${props.post.id}/users`
+        api + `/api/like/post/${props.post.id}/users`
       );
       setLikers(names.data.users);
       setNoOfComments(noOfComments.data.count);
