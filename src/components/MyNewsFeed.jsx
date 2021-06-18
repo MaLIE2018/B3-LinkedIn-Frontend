@@ -22,7 +22,7 @@ class MyNewsFeed extends React.Component {
   handleUpdatePost = async (e, method, id) => {
     e.preventDefault();
     try {
-      let response = await fetch(api + "api/post/" + id, {
+      let response = await fetch(api + "/api/post/" + id, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +34,7 @@ class MyNewsFeed extends React.Component {
         if (this.state.formData !== undefined && method !== "DELETE") {
           const data = await response.json();
           let newRes = await fetch(
-            api + "api/post/" + data[0].id + "/uploadPostImage",
+            api + "/api/post/" + data[0].id + "/uploadPostImage",
             {
               method: "POST",
               body: this.state.formData,
