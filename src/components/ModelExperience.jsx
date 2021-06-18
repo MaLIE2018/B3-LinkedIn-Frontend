@@ -195,7 +195,6 @@ function ModalExperience(props) {
       let response = await fetch(fetchUrl, {
         method: method,
         headers: new Headers({
-          Authorization: "Bearer " + props.bearerToken,
           "Content-Type": "application/json",
         }),
         body: JSON.stringify(data.experience),
