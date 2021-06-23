@@ -9,6 +9,18 @@ export const updateProfileImage = () => {
   }
 }
 
+export const updatePosts = () => {
+  return {
+    type: "UPDATE_POSTS"
+  }
+}
+
+export const showModal = () => {
+  return {
+    type: "SHOW_POST_MODAL"
+  }
+}
+
 
 export const userProfile = (profile) => {
   return {
@@ -34,6 +46,13 @@ export const searchQuery = (searchWord) => {
 export const selectedPost = (post) => {
   return {
     type: "SELECTED_POST",
+    payload: post
+  }
+}
+
+export const addNewPost = (post) => {
+  return {
+    type: "ADD_NEW_POST",
     payload: post
   }
 }

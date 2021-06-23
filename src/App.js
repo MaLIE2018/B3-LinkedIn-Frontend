@@ -13,7 +13,6 @@ import { Redirect, Route, withRouter } from 'react-router-dom';
 import Login  from './components/Login.jsx';
 
 const api = process.env.REACT_APP_BE_URL
-
 const userId = localStorage.getItem("userId")
 
 export let userContext = React.createContext({id: userId})
@@ -35,17 +34,11 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    if(localStorage.getItem('userId')){
-      this.getMyProfile()
-    }
+    if(localStorage.getItem('userId')) this.getMyProfile()
   }
   componentDidUpdate(prevProps, prevState){
-    if(this.props.update !== prevProps.update){
-      this.getMyProfile()
-    }
-    if(this.props.profileImageUpdate !== prevProps.profileImageUpdate){
-      this.getMyProfile()
-    }
+    if(this.props.update !== prevProps.update)this.getMyProfile()
+    if(this.props.profileImageUpdate !== prevProps.profileImageUpdate) this.getMyProfile()
   }
 	render(){ 
     if(localStorage.getItem('userId')){

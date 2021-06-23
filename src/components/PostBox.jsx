@@ -14,8 +14,10 @@ import Box from "./parts/Box";
 import comments from "../assets/img/comments.PNG";
 import styled from "styled-components";
 import axios from "axios";
-const api = process.env.REACT_APP_BE_URL;
+import { useDispatch } from "react-redux";
 
+let userId = localStorage.getItem("userId");
+const api = process.env.REACT_APP_BE_URL;
 const Styles = styled.div`
   .btn {
     padding: 0;
@@ -24,12 +26,12 @@ const Styles = styled.div`
 `;
 
 const PostBox = (props) => {
-  const now = new Date();
-  let userId = localStorage.getItem("userId");
   const [likes, setLikes] = useState(0);
   const [noOfComments, setNoOfComments] = useState(0);
   const [update, setUpdate] = useState(false);
   const [Likers, setLikers] = useState([]);
+  const dispatch = useDispatch();
+  const now = new Date();
 
   const getLikesComments = async () => {
     try {
@@ -86,16 +88,20 @@ const PostBox = (props) => {
                       {" "}
                       like this.
                     </span>
-                    {userId == props.post.profileId && (
+                    {userId == props.post.profile?.id && (
                       <EllipsisHorizontalOutline
                         color={"#808080"}
                         title={"thumb"}
                         height='25px'
                         width='25px'
                         className='float-right btn'
-                        onClick={(e) =>
-                          props.onHandleEditButtonClick(e, state.item)
-                        }
+                        onClick={() => {
+                          dispatch({
+                            type: "ADD_NEW_POST",
+                            payload: props.post,
+                          });
+                          dispatch({ type: "SHOW_POST_MODAL" });
+                        }}
                       />
                     )}
                   </Col>
