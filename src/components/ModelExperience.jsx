@@ -59,7 +59,6 @@ function ModalExperience(props) {
   }, [data.dates]);
 
   useEffect(() => {
-    console.log("props.open:", props.open);
     if (props.open) {
       fillData();
     }

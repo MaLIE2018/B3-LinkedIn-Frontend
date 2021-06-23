@@ -9,10 +9,13 @@ import DropdownButton from "../components/parts/DropdownButton";
 import UpdateImgProfileModal from "./UpdateImgProfileModal";
 import EditProfile from "./EditProfile";
 import EditButton from "./parts/EditButton";
+import { connect } from "react-redux";
+import { updateProfileImage } from "../actions/update.js";
 
 const api = process.env.REACT_APP_BE_URL;
 let userId = localStorage.getItem("userId");
-export default class ProfileTop extends Component {
+
+class ProfileTop extends Component {
   state = {
     showModal: false,
     formData: {},
@@ -51,7 +54,7 @@ export default class ProfileTop extends Component {
       );
       if (newRes.ok) {
         console.log("FileUploaded");
-        this.props.onDidUpdate();
+        this.props.setUpdate();
       }
     } catch (error) {
       console.log("something went wrong");
@@ -139,3 +142,11 @@ export default class ProfileTop extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+  setUpdate: () => dispatch(updateProfileImage()),
+});
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileTop);

@@ -94,7 +94,7 @@ const PostBox = (props) => {
                         width='25px'
                         className='float-right btn'
                         onClick={(e) =>
-                          this.handleEditButtonClick(e, state.item)
+                          props.onHandleEditButtonClick(e, state.item)
                         }
                       />
                     )}

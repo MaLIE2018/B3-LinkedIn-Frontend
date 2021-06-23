@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Box from "./parts/Box";
 import ItemsList from "./parts/ItemsList";
-
+import { userContext } from "../App";
 const api = process.env.REACT_APP_BE_URL;
 
 const PeopleAlsoViewed = () => {
   const [profiles, setProfiles] = useState([]);
+  const user = useContext(userContext);
+  // console.log("user:", user);
+
   const getProfiles = async () => {
     try {
       const requestProfile = await fetch(api + "/api/profile/", {

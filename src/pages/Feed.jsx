@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CaretDownOutline } from "react-ionicons";
+import { connect } from "react-redux";
 import AddToYourFeed from "../components/AddToYourFeed";
 import Groups from "./../components/Groups";
 import LatestJobs from "./../components/LatestJobs";
@@ -124,4 +125,8 @@ class Feed extends Component {
   }
 }
 
-export default Feed;
+const mapStateToProps = (state) => (state) => {
+  return { profile: state.userProfile };
+};
+
+export default connect(mapStateToProps)(Feed);

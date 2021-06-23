@@ -96,7 +96,11 @@ class MyNewsFeed extends React.Component {
       <>
         {this.props.posts.length > 0 ? (
           this.props.posts.map((post) => (
-            <PostBox post={post} image={this.props.profile.image} />
+            <PostBox
+              post={post}
+              image={this.props.profile.image}
+              onHandleEditButtonClick={this.handleEditButtonClick}
+            />
           ))
         ) : (
           <MyLoader />

@@ -18,6 +18,8 @@ import {
 import mainLogo from "../assets/img/Logo.png";
 import "../css/MyNavbar.css";
 import FilterBar from "./FilterBar";
+import { connect } from "react-redux";
+import { searchQuery } from "../actions/update.js";
 
 class MyNavbar extends React.Component {
   state = { filter: "" };
@@ -86,7 +88,9 @@ class MyNavbar extends React.Component {
                         id='search'
                         placeholder='Search'
                         value={this.props.query}
-                        onChange={this.handleChangeQuery}></FormControl>
+                        onChange={(e) =>
+                          this.props.setSearchWord(e.target.value)
+                        }></FormControl>
                     </Form>
                   </Nav>
                   <Nav>
@@ -227,5 +231,19 @@ class MyNavbar extends React.Component {
     );
   }
 }
+const mapStateToProps = (state) => (state) => {
+  return {
+    name: state.userProfile?.name,
+    image: state.userProfile?.image,
+    query: state.searchWord,
+  };
+};
 
-export default withRouter(MyNavbar);
+const mapDispatchToProps = (dispatch) => ({
+  setSearchWord: (query) => dispatch(searchQuery(query)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(MyNavbar));

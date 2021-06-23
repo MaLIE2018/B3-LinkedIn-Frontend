@@ -1,9 +1,12 @@
 import { Modal, Form } from "react-bootstrap";
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { update } from "../actions/update.js";
 
 const api = process.env.REACT_APP_BE_URL;
 let userId = localStorage.getItem("userId");
+
 class EditProfile extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +21,10 @@ class EditProfile extends Component {
     };
   }
 
+  update = () => {
+    this.props.update();
+  };
+
   getProfile = async () => {
     try {
       const request = await fetch(api + "/api/profile/" + userId, {
@@ -25,7 +32,6 @@ class EditProfile extends Component {
       });
       if (request.ok) {
         const response = await request.json();
-        console.log("response:", response);
         this.setState({
           profile: {
             name: response.name,
@@ -93,7 +99,12 @@ class EditProfile extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <form onSubmit={this.updateProfile}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                this.updateProfile(e);
+                return this.props.setUpdate();
+              }}>
               <div className='container-fluid mx-0 px-0'>
                 <div className='row justify-content-between mt-4'>
                   <div className='col-6 text-muted'>First Name *</div>
@@ -300,12 +311,12 @@ class EditProfile extends Component {
                         <option>Insurance</option>
                         <option>International Affairs</option>
                         <option>International Trade &amp; Development</option>
-                        <optio>Internet</optio>
+                        <option>Internet</option>
                         <option>Investment Banking</option>
                         <option>Investment Management</option>
                         <option>Judiciary</option>
                         <option>Law Enforcement</option>
-                        <optio>Law Practice</optio>
+                        <option>Law Practice</option>
                         <option>Legal Services</option>
                         <option>Legislative Office</option>
                         <option>Leisure, Travel &amp; Tourism</option>
@@ -361,13 +372,13 @@ class EditProfile extends Component {
                         <option>Restaurants</option>
                         <option>Retail</option>
                         <option>Security &amp; Investigations</option>
-                        <optio>Semiconductors</optio>
+                        <option>Semiconductors</option>
                         <option>Shipbuilding</option>
                         <option>Sporting Goods</option>
                         <option>Sports</option>
                         <option>Staffing &amp; Recruiting</option>
                         <option>Supermarkets</option>
-                        <optio>Telecommunications</optio>
+                        <option>Telecommunications</option>
                         <option>Textiles</option>
                         <option>Think Tanks</option>
                         <option>Tobacco</option>
@@ -413,4 +424,13 @@ class EditProfile extends Component {
   }
 }
 
-export default withRouter(EditProfile);
+const mapDispatchToProps = (dispatch) => ({
+  setUpdate: () => dispatch(update()),
+});
+
+const mapStateToProps = (state) => state;
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(EditProfile));

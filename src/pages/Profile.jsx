@@ -7,6 +7,11 @@ import Activity from "../components/Activity";
 import Experience from "../components/Experience";
 import PeopleAlsoViewed from "../components/PeopleAlsoViewed";
 import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { selectedProfile } from "../actions/update.js";
+const api = process.env.REACT_APP_BE_URL;
+
+const userId = localStorage.getItem("userId");
 
 class Profile extends Component {
   state = {
@@ -15,17 +20,31 @@ class Profile extends Component {
 
   componentDidMount() {
     document.title = `Linkedin - Profile ${this.props.profile.name} `;
+    this.getProfile();
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.match.params.id !== this.state.currProfileId) {
-      this.setState((state) => {
-        return { currProfileId: this.props.match.params.id };
-      });
-      this.props.onCurrProfileChange(this.props.match.params.id);
-      console.log("this.props.profile.name:", this.props.profile.name);
+    if (prevProps.profile.id !== this.props.profile.id) {
+      this.getProfile();
+    }
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.getProfile();
     }
     document.title = `Linkedin - Profile ${this.props.profile.name} `;
+  };
+
+  getProfile = async () => {
+    try {
+      const res = await fetch(
+        api + "/api/profile/" + this.props.match.params.id
+      );
+      if (res.ok) {
+        const data = await res.json();
+        this.props.setCurrentProfile(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   render() {
@@ -37,18 +56,11 @@ class Profile extends Component {
           <Col md={8}>
             {profileId && (
               <>
-                <ProfileTop
-                  profile={this.props.profile}
-                  bearerToken={this.props.bearerToken}
-                  onDidUpdate={this.props.onDidUpdate}
-                />
+                <ProfileTop profile={this.props.profile} />
                 <About bio={this.props.profile.bio} />
-                {!this.state.currProfileId && <Dashboard />}
+                {!this.props.match.params.id == userId && <Dashboard />}
                 <Activity profile={this.props.profile} />
-                <Experience
-                  profileId={profileId}
-                  bearerToken={this.props.bearerToken}
-                />
+                <Experience profileId={profileId} />
               </>
             )}
           </Col>
@@ -61,4 +73,15 @@ class Profile extends Component {
   }
 }
 
-export default withRouter(Profile);
+const mapStateToProps = (state) => {
+  return { profile: state.selectedProfile };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentProfile: (profile) => dispatch(selectedProfile(profile)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Profile));

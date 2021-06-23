@@ -12,7 +12,7 @@ function PostsModal(props) {
       document.querySelector("#postText")?.value
     ) {
       document.querySelector("#postText").value = props.currentPost.text;
-      if (props.currentProfileId === props.currentPost?.user?.id) {
+      if (props.currentProfileId === props.currentPost?.profile?.id) {
         setEdit(true);
       }
     }
