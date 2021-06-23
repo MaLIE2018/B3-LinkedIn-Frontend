@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
 import { CaretDownOutline } from "react-ionicons";
 import { connect } from "react-redux";
+import { showModal, updatePosts } from "../actions/update";
 import AddToYourFeed from "../components/AddToYourFeed";
+import PostsModal from "../components/PostsModal";
 import Groups from "./../components/Groups";
 import LatestJobs from "./../components/LatestJobs";
 import MyNewsFeed from "./../components/MyNewsFeed";
@@ -24,7 +26,7 @@ class Feed extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.update !== this.state.update) {
+    if (this.props.update !== prevProps.update) {
       this.getPosts();
     }
   };
@@ -56,9 +58,9 @@ class Feed extends Component {
         //   resp.filter(async (post) => await checkImg(post.image))
         // );
         this.setState({
-          posts: resp.reverse(),
-          update: false,
+          posts: resp.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1)),
         });
+        if (this.props.update) this.props.setUpdatePosts();
       }
     } catch (error) {
       console.log(error);
@@ -81,11 +83,9 @@ class Feed extends Component {
         </Col>
         <Col md={6}>
           <Posts
-            bearerToken={this.props.bearerToken}
             profile={this.props.profile}
             rounded={true}
             onPostsClick={this.getMyPosts}
-            onHandleUpdate={this.handleUpdate}
           />
           <Row className='m-0 pr-2 pl-2'>
             <Col md={10} className='p-0'>
@@ -109,24 +109,32 @@ class Feed extends Component {
 
           <MyNewsFeed
             posts={this.state.posts}
-            bearerToken={this.props.bearerToken}
             profile={this.props.profile}
             rounded={true}
             onPostsClick={this.getMyPosts}
-            onHandleUpdate={this.handleUpdate}
           />
         </Col>
         <Col md={3}>
           <AddToYourFeed />
           <LatestJobs profile={this.props.profile} />
         </Col>
+        <PostsModal rounded={this.props.rounded} profile={this.props.profile} />
       </Row>
     );
   }
 }
 
 const mapStateToProps = (state) => (state) => {
-  return { profile: state.userProfile };
+  return {
+    profile: state.userProfile,
+    update: state.updatePosts,
+    showModal: state.showModal,
+  };
 };
 
-export default connect(mapStateToProps)(Feed);
+const mapDispatchToProps = (dispatch) => ({
+  setUpdatePosts: () => dispatch(updatePosts()),
+  showModal: () => dispatch(showModal()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);
